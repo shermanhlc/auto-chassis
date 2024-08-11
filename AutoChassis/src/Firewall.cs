@@ -7,8 +7,9 @@ namespace AutoChassis
 {
     public class Firewall
     {
-        double HEAD_CLEARANCE = 6;
-        double BODY_CLEARANCE = 3;
+        // these should be moved to a easily modifiable configuration file, so new versions of the rules can be easily implemented
+        const double HEAD_CLEARANCE = 6;
+        const double BODY_CLEARANCE = 3;
         /// <summary>
         /// an additive value that is added to the calculated values to account for manufacturing or measurement error
         /// </summary>
@@ -24,19 +25,20 @@ namespace AutoChassis
         public Driver driver { get; set; }
         public double seat_height { get; set; } // distance from the plane of tube A (ar <-> al) to the TOP of the seat
         public Point helmet_center { get; set; }
+        public Point shoulder_point { get; set; }
 
         // restraints
         public double head_clearance { get; set; }
         public double body_clearance { get; set; }
 
 
-        public Point BR { get; set; }
+        public Point BR { get; set; } // x > 4 requried by the rules
         public Point BL { get; set; }
 
         public Point SR { get; set; }
         public Point SL { get; set; }
 
-        public Point AR { get; set; }
+        public Point AR { get; set; } // x > 4 requried by the rules
         public Point AL { get; set; }
 
         public Firewall()
@@ -50,15 +52,26 @@ namespace AutoChassis
             Console.WriteLine("beginning calculations for firewall");
             // get my tolerances
             // get my driver
+            // get seat height
+            seat_height = 4;
 
             helmet_center = CaluclateHelmetCenter();
+            Console.WriteLine("helmet center: ");
             Printer.PrintPoint(helmet_center);
+
+            double d = (HEAD_CLEARANCE + Equations.CircumferenceToRadius(driver.helmet_circumference));
+            Console.WriteLine("d: " + d);
 
             DetermineLineB();
+            DetermineLineA();
             Printer.PrintSingleLineColor("COMPLETE", ConsoleColor.Green, true);
             Printer.PrintPoint(BR);
-
+            Printer.PrintPoint(shoulder_point);
             Printer.PrintPoint(helmet_center);
+
+            // Printer.PrintPoint(helmet_center);
+
+            
         }
 
         public void CalculatePermeter()
@@ -96,7 +109,7 @@ namespace AutoChassis
 
         public void DetermineLineB()
         {
-            Point shoulder_point = new Point(
+            shoulder_point = new Point(
                 (driver.shoulder_width + BODY_CLEARANCE) / 2 * tolerance,
                 (seat_height + driver.back_height) * tolerance,
                 0 // not implemented yet
@@ -107,7 +120,7 @@ namespace AutoChassis
                 (helmet_center.y + HEAD_CLEARANCE) * tolerance,
                 0 // not implemented yet
             );
-
+            Printer.PrintPoint(top_point);
             bool clear = false;
             while (!clear)
             {
@@ -118,20 +131,13 @@ namespace AutoChassis
                 {
                     double t = i / totalPoints;
                     Point p = Equations.Interpolation(top_point, shoulder_point, t);
-                    if (!CheckClearance(p))
+                    if (!CheckClearance(p, HEAD_CLEARANCE))
                     {
-                        //Console.WriteLine(CheckClearance(p));
                         top_point.x += interation_step;
                         clear = false;
                         break;
                     }
-
-                    if (i % 500 == 0)
-                    {
-                        Printer.PrintPoint(top_point);
-                    }
                 }
-                //Console.WriteLine("clear: " + clear);
             }
 
             BR = new Point(
@@ -139,14 +145,16 @@ namespace AutoChassis
                 top_point.y,
                 0
             );
+        }
 
-            bool CheckClearance(Point a)
-            {
-                // Console.WriteLine("len " + Equations.Length(a, helmet_center));
-                // Console.WriteLine("oth " + (HEAD_CLEARANCE + Equations.CircumferenceToRadius(driver.helmet_circumference)) * tolerance);
-                // Console.WriteLine(Equations.Length(a, helmet_center) > (HEAD_CLEARANCE + Equations.CircumferenceToRadius(driver.helmet_circumference)) * tolerance);
-                return Equations.Length(a, helmet_center) > (HEAD_CLEARANCE + Equations.CircumferenceToRadius(driver.helmet_circumference)) * tolerance;
-            }
+        public void DetermineLineA()
+        {
+            
+        }
+
+        bool CheckClearance(Point a, double clearance)
+        {
+            return Equations.Length(a, helmet_center) > (clearance + Equations.CircumferenceToRadius(driver.helmet_circumference)) * tolerance;
         }
 
         public Point CaluclateHelmetCenter()
@@ -154,10 +162,19 @@ namespace AutoChassis
             double helmet_radius = Equations.CircumferenceToRadius(driver.helmet_circumference);
             double x = 0;
             double y;
-            y = seat_height + driver.back_height + helmet_radius;
+            y = seat_height + driver.back_height + (driver.head_height - helmet_radius);
 
             helmet_center = new Point(x, y);
             return helmet_center;
+        }
+
+        public Point ShoulderPoint()
+        {
+            double x = (driver.shoulder_width + BODY_CLEARANCE) / 2;
+            double y = seat_height + driver.back_height;
+
+            shoulder_point = new Point(x, y);
+            return shoulder_point;
         }
     }
 }
