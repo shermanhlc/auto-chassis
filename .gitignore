@@ -3,4 +3,6 @@
 [Oo]bj/
 
 # output files
+data/
 *.pts
+*.bak*

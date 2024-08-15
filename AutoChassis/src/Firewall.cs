@@ -10,6 +10,7 @@ namespace AutoChassis
         // these should be moved to a easily modifiable configuration file, so new versions of the rules can be easily implemented
         const double HEAD_CLEARANCE = 6;
         const double BODY_CLEARANCE = 3;
+        const double SIDE_MEMBER_HEIGHT = 13.6;
         /// <summary>
         /// an additive value that is added to the calculated values to account for manufacturing or measurement error
         /// </summary>
@@ -26,6 +27,8 @@ namespace AutoChassis
         public double seat_height { get; set; } // distance from the plane of tube A (ar <-> al) to the TOP of the seat
         public Point helmet_center { get; set; }
         public Point shoulder_point { get; set; }
+        public Point elbow_point { get; set; }
+        public Point hip_point { get; set; }
 
         // restraints
         public double head_clearance { get; set; }
@@ -55,23 +58,18 @@ namespace AutoChassis
             // get seat height
             seat_height = 4;
 
-            helmet_center = CaluclateHelmetCenter();
-            Console.WriteLine("helmet center: ");
-            Printer.PrintPoint(helmet_center);
-
-            double d = (HEAD_CLEARANCE + Equations.CircumferenceToRadius(driver.helmet_circumference));
-            Console.WriteLine("d: " + d);
-
             DetermineLineB();
-            DetermineLineA();
-            Printer.PrintSingleLineColor("COMPLETE", ConsoleColor.Green, true);
-            Printer.PrintPoint(BR);
-            Printer.PrintPoint(shoulder_point);
-            Printer.PrintPoint(helmet_center);
-
-            // Printer.PrintPoint(helmet_center);
-
             
+            Task calcLineA = Task.Run(() => DetermineLineA());
+            // Task example = Task.Run(() => Example());
+
+            await Task.WhenAll(calcLineA);
+            Console.WriteLine("finished calculations for firewall");
+            Printer.PrintPointWithLabel(BR, "BR");
+            Printer.PrintPointWithLabel(SR, "SR");
+            Printer.PrintPointWithLabel(AR, "AR");
+            Console.Write('\n');
+            Printer.PrintPointWithLabel(shoulder_point, "shoulder point");
         }
 
         public void CalculatePermeter()
@@ -109,18 +107,15 @@ namespace AutoChassis
 
         public void DetermineLineB()
         {
-            shoulder_point = new Point(
-                (driver.shoulder_width + BODY_CLEARANCE) / 2 * tolerance,
-                (seat_height + driver.back_height) * tolerance,
-                0 // not implemented yet
-            );
+            CaluclateHelmetCenter();
+            CalculateShoulderPoint();
 
             Point top_point = new Point(
                 0, // start in center
                 (helmet_center.y + HEAD_CLEARANCE) * tolerance,
                 0 // not implemented yet
             );
-            Printer.PrintPoint(top_point);
+
             bool clear = false;
             while (!clear)
             {
@@ -131,7 +126,7 @@ namespace AutoChassis
                 {
                     double t = i / totalPoints;
                     Point p = Equations.Interpolation(top_point, shoulder_point, t);
-                    if (!CheckClearance(p, HEAD_CLEARANCE))
+                    if (!CheckHelmetClearance(p))
                     {
                         top_point.x += interation_step;
                         clear = false;
@@ -147,14 +142,69 @@ namespace AutoChassis
             );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>Requires DetermineLineB() to finishing run</remarks>
         public void DetermineLineA()
         {
-            
+            CalculateElbowPoint();
+            CalculateHipPoint();
+
+            SR = Equations.PointAlongLineAtYValue(BR, shoulder_point, SIDE_MEMBER_HEIGHT);
+
+            Point bottom_point = new Point(
+                0,
+                0,
+                0 // not implemented yet
+            );
+
+            bool clear = false;
+            while (!clear) 
+            {
+                clear = true;
+                double totalPoints = Equations.Length(SR, bottom_point) / interation_step;
+
+                for (int i = 0; i < totalPoints; i++)
+                {
+                    double t = i / totalPoints;
+                    Point p = Equations.Interpolation(SR, bottom_point, t);
+                    if (!CheckElbowClearance(p))
+                    {
+                        bottom_point.x += interation_step;
+                        clear = false;
+                        break;
+                    }
+                    else if (!CheckHipClearance(p))
+                    {
+                        bottom_point.x += interation_step;
+                        clear = false;
+                        break;
+                    }
+                }
+            }
+
+
+            AR = new Point(
+                bottom_point.x,
+                bottom_point.y,
+                0
+            );
         }
 
-        bool CheckClearance(Point a, double clearance)
+        bool CheckHelmetClearance(Point a)
         {
-            return Equations.Length(a, helmet_center) > (clearance + Equations.CircumferenceToRadius(driver.helmet_circumference)) * tolerance;
+            return Equations.Length(a, helmet_center) > (HEAD_CLEARANCE * tolerance + Equations.CircumferenceToRadius(driver.helmet_circumference));
+        }
+
+        bool CheckElbowClearance(Point a)
+        {
+            return Equations.Length(a, shoulder_point) > BODY_CLEARANCE * tolerance;
+        }
+
+        bool CheckHipClearance(Point a)
+        {
+            return Equations.Length(a, hip_point) > BODY_CLEARANCE * tolerance;
         }
 
         public Point CaluclateHelmetCenter()
@@ -168,13 +218,31 @@ namespace AutoChassis
             return helmet_center;
         }
 
-        public Point ShoulderPoint()
+        public Point CalculateShoulderPoint()
         {
-            double x = (driver.shoulder_width + BODY_CLEARANCE) / 2;
+            double x = (driver.shoulder_width / 2) + BODY_CLEARANCE; // this differs from the other Calculate___ methods since this is a point on the CHASSIS not the driver
             double y = seat_height + driver.back_height;
 
             shoulder_point = new Point(x, y);
             return shoulder_point;
+        }
+
+        private Point CalculateElbowPoint()
+        {
+            double x = driver.shoulder_width / 2;
+            double y = (seat_height + driver.back_height) - driver.upper_arm_length;
+
+            elbow_point = new Point(x, y);
+            return elbow_point;
+        }
+
+        private Point CalculateHipPoint()
+        {
+            double x = driver.hip_width / 2;
+            double y = seat_height;
+
+            hip_point = new Point(x, y);
+            return hip_point;
         }
     }
 }

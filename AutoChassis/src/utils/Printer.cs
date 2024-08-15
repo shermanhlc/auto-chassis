@@ -47,5 +47,10 @@ namespace Utilities
         {
             MultipleColor([p.x.ToString(), " ", p.y.ToString(), " ", p.z.ToString()], [ConsoleColor.Red, ConsoleColor.White, ConsoleColor.Green, ConsoleColor.White, ConsoleColor.Blue]);
         }
+
+        public static void PrintPointWithLabel(Point p, string label)
+        {
+            MultipleColor([label, ": ", p.x.ToString(), " ", p.y.ToString(), " ", p.z.ToString()], [ConsoleColor.White, ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White, ConsoleColor.Green, ConsoleColor.White, ConsoleColor.Blue]);
+        }
     }
 }

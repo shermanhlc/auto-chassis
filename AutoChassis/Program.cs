@@ -7,7 +7,7 @@ using AutoChassis;
 class Program
 {
     public static string version_number = "v0.0.1";
-    private static int sleep = 400;
+    private static int sleep = 00;
     public static async Task Main(string[] args)
     {
         await OnStart();

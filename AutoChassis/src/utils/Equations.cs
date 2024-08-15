@@ -22,5 +22,20 @@ namespace Utilities
             );
         }
 
+        public static Point PointAlongLineAtYValue(Point p1, Point p2, double y)
+        {
+            double slope = (p2.y - p1.y) / (p2.x - p1.x);
+            double y_intercept = p1.y - (slope * p1.x);
+
+            double x = (y - y_intercept) / slope;
+
+            Point point_on_line = new Point (
+                x,
+                y,
+                0
+            );
+
+            return point_on_line;
+        }
     }
 }
