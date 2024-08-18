@@ -47,12 +47,6 @@ class Program
             interation_step = .01
         };
 
-        // fw.CalculatePermeter();
-        // Console.WriteLine(fw.BLength());
-
-        // Point[] pts = [ fw.BR, fw.BL ];
-        // PTSBuilder.BuildPTSFile(pts);
-
         Task t_firewall = fw.Start();
         await Task.WhenAll(t_firewall); // <-- add other parts here to run concurrently (t_firewall, t_other, t_another)
     }

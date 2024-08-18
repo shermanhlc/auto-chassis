@@ -7,10 +7,17 @@ namespace AutoChassis
 {
     public class Firewall
     {
+        // TODO: add checks
+            // - the width exceeds 29" at 27" above the seat bottom
+            // - lateral cross members exceed 8"
+        // TODO: add inputs for seat bottom, side member height, tolerance, interation
+        // TODO: clean up the code
+
         // these should be moved to a easily modifiable configuration file, so new versions of the rules can be easily implemented
         const double HEAD_CLEARANCE = 6;
         const double BODY_CLEARANCE = 3;
         const double SIDE_MEMBER_HEIGHT = 13.6;
+        const double MIN_LATERAL_LENGTH = 8;
         /// <summary>
         /// an additive value that is added to the calculated values to account for manufacturing or measurement error
         /// </summary>
@@ -30,9 +37,6 @@ namespace AutoChassis
         public Point elbow_point { get; set; }
         public Point hip_point { get; set; }
 
-        // restraints
-        public double head_clearance { get; set; }
-        public double body_clearance { get; set; }
 
 
         public Point BR { get; set; } // x > 4 requried by the rules
@@ -112,7 +116,7 @@ namespace AutoChassis
 
             Point top_point = new Point(
                 0, // start in center
-                (helmet_center.y + HEAD_CLEARANCE) * tolerance,
+                helmet_center.y + HEAD_CLEARANCE * tolerance,
                 0 // not implemented yet
             );
 
@@ -135,6 +139,11 @@ namespace AutoChassis
                 }
             }
 
+            if (top_point.x < MIN_LATERAL_LENGTH / 2)
+            {
+                top_point.x = MIN_LATERAL_LENGTH * tolerance;
+            }
+
             BR = new Point(
                 top_point.x,
                 top_point.y,
@@ -151,7 +160,7 @@ namespace AutoChassis
             CalculateElbowPoint();
             CalculateHipPoint();
 
-            SR = Equations.PointAlongLineAtYValue(BR, shoulder_point, SIDE_MEMBER_HEIGHT);
+            SR = Equations.PointAlongLineAtYValue(BR, shoulder_point, SIDE_MEMBER_HEIGHT + seat_height);
 
             Point bottom_point = new Point(
                 0,
@@ -184,6 +193,10 @@ namespace AutoChassis
                 }
             }
 
+            if (bottom_point.x < MIN_LATERAL_LENGTH / 2)
+            {
+                bottom_point.x = MIN_LATERAL_LENGTH * tolerance;
+            }
 
             AR = new Point(
                 bottom_point.x,
@@ -220,7 +233,7 @@ namespace AutoChassis
 
         public Point CalculateShoulderPoint()
         {
-            double x = (driver.shoulder_width / 2) + BODY_CLEARANCE; // this differs from the other Calculate___ methods since this is a point on the CHASSIS not the driver
+            double x = (driver.shoulder_width / 2) + BODY_CLEARANCE * tolerance; // this differs from the other Calculate___ methods since this is a point on the CHASSIS not the driver
             double y = seat_height + driver.back_height;
 
             shoulder_point = new Point(x, y);
