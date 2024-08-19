@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Utilities;
 using AutoChassis;
+using Suspension;
 
 class Program
 {
@@ -30,6 +31,9 @@ class Program
             else if (input == "t" || input == "test") {
                 await TestGround();
             }
+            else if (input == "s" || input == "suspension") {
+                await TestGroundSuspension();
+            }
             else {
                 Printer.MultipleColor(["Invalid input: ", input, " is not a valid command"], [ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White]);
             }
@@ -49,6 +53,19 @@ class Program
 
         Task t_firewall = fw.Start();
         await Task.WhenAll(t_firewall); // <-- add other parts here to run concurrently (t_firewall, t_other, t_another)
+    }
+
+    public static async Task TestGroundSuspension()
+    {
+        ControlArm lower = new ControlArm {
+            front = new Point(9, 0, 0.25), // 6, 7.5, 13.25
+            rear = new Point(0, 0, 0)     // 15, 7.5, 13.5
+        };
+
+        ControlArm upper = new ControlArm {
+            // front = new Point(),
+            // rear = new Point()
+        };
     }
 
     public static async Task OnStart()
