@@ -7,7 +7,7 @@ using Suspension;
 
 class Program
 {
-    public static string version_number = "v0.0.1";
+    public static string version_number = "v0.1.0";
     private static int sleep = 00;
     public static async Task Main(string[] args)
     {
@@ -57,15 +57,32 @@ class Program
 
     public static async Task TestGroundSuspension()
     {
+        // 9 inches apart, perfectly parallel to the center plane, and the front is .25 inches higher than the rear
         ControlArm lower = new ControlArm {
-            front = new Point(9, 0, 0.25), // 6, 7.5, 13.25
-            rear = new Point(0, 0, 0)     // 15, 7.5, 13.5
+            front = new Point(9, 7.5, 0.25), // 6, 7.5, 13.25)
+            rear = new Point(0, 7.5, 0)      // 15, 7.5, 13.5
         };
 
         ControlArm upper = new ControlArm {
-            // front = new Point(),
-            // rear = new Point()
+            front = new Point(9, 9.4, 9.5),
+            rear = new Point(0, 9.4, 8)
         };
+
+        Shock shock = new Shock {
+            upper = new Point(4, 20.75, 5.5), // < this point does not matter and probably is never used
+            lower = new Point(-5.5, 8.75, 19)
+        };
+
+
+        FrontSuspension fs = new FrontSuspension {
+            lower_arm = lower,
+            upper_arm = upper,
+            shock = shock
+        };
+
+
+        // upper_arm_shock_mount: (11, 20,75, 19) >> (4, 20.75, 5.5)
+        // chassis_shock_mount: (20.5, 8.75, 32) >> (-5.5, 8.75, 19)
     }
 
     public static async Task OnStart()

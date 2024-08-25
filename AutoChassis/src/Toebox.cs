@@ -1,4 +1,5 @@
 using Utilities;
+using Suspension;
 
 namespace AutoChassis
 {
@@ -28,6 +29,14 @@ namespace AutoChassis
         public Point GR { get; set; }
         public Point GL { get; set; }
 
+        FrontSuspension front_suspension { get; set; }
+        Firewall firewall { get; set; }
+
+        public Toebox(FrontSuspension fs, Firewall fw)
+        {
+            firewall = fw;
+            front_suspension = fs;
+        }
 
         public void FindLegAngle()
         {
@@ -73,7 +82,20 @@ namespace AutoChassis
              * check any point on the upper leg (lower leg needs no clearance) is at least 3" from any member
              */
 
+            /**
+             * this uses distance of the rear axle from the firewall, then the distance between axles
+             * check the 
+             */
+
              return false;
+        }
+
+        public void BuildRearBar()
+        {
+            FR = front_suspension.lower_arm.rear;
+            
+            DR = Equations.PointAlongLineAtYValue(FR, front_suspension.upper_arm.rear, firewall.SR.y);
+
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Suspension
 {
     public class Shock
     {
-        Point upper { get; set; }
-        Point lower { get; set; }
+        public Point upper { get; set; }
+        public Point lower { get; set; }
     }
 }
