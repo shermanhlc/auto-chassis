@@ -37,5 +37,15 @@ namespace Utilities
 
             return point_on_line;
         }
+
+        public static Point PointAlong3DLineAtZValue(Point a, Point b, double given_z)
+        {
+            double t = (given_z - a.z) / (b.z - a.z);
+
+            double x = a.x + t * (b.x - a.x);
+            double y = a.y + t * (b.y - a.y);
+
+            return new Point(x, y, given_z);
+        }
     }
 }

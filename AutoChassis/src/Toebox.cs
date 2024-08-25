@@ -38,6 +38,21 @@ namespace AutoChassis
             front_suspension = fs;
         }
 
+        public async Task Start()
+        {
+            BuildRearBar();
+            BuildFrontBar();
+
+            Printer.PrintPointWithLabel(DR, "DR");
+            Printer.PrintPointWithLabel(DL, "DL");
+            Printer.PrintPointWithLabel(ER, "ER");
+            Printer.PrintPointWithLabel(EL, "EL");
+            Printer.PrintPointWithLabel(FR, "FR");
+            Printer.PrintPointWithLabel(FL, "FL");
+            Printer.PrintPointWithLabel(GR, "GR");
+            Printer.PrintPointWithLabel(GL, "GL");
+        }
+
         public void FindLegAngle()
         {
             // ! not implemented yet
@@ -90,12 +105,22 @@ namespace AutoChassis
              return false;
         }
 
-        public void BuildRearBar()
+        private void BuildRearBar()
         {
             FR = front_suspension.lower_arm.rear;
-            
-            DR = Equations.PointAlongLineAtYValue(FR, front_suspension.upper_arm.rear, firewall.SR.y);
+            DR = Equations.PointAlong3DLineAtZValue(FR, front_suspension.upper_arm.rear, firewall.SR.y);
 
+            FL = new Point(-FR.x, FR.y, FR.z);
+            DL = new Point(-DR.x, DR.y, DR.z);
+        }
+
+        private void BuildFrontBar()
+        {
+            ER = front_suspension.lower_arm.front;
+            GR = Equations.PointAlong3DLineAtZValue(ER, front_suspension.upper_arm.front, firewall.SR.y);
+
+            EL = new Point(-ER.x, ER.y, ER.z);
+            GL = new Point(-GR.x, GR.y, GR.z);
         }
     }
 }

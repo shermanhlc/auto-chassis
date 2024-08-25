@@ -31,9 +31,6 @@ class Program
             else if (input == "t" || input == "test") {
                 await TestGround();
             }
-            else if (input == "s" || input == "suspension") {
-                await TestGroundSuspension();
-            }
             else {
                 Printer.MultipleColor(["Invalid input: ", input, " is not a valid command"], [ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White]);
             }
@@ -53,9 +50,11 @@ class Program
 
         Task t_firewall = fw.Start();
         await Task.WhenAll(t_firewall); // <-- add other parts here to run concurrently (t_firewall, t_other, t_another)
+
+        await TestGroundSuspension(fw);
     }
 
-    public static async Task TestGroundSuspension()
+    public static async Task TestGroundSuspension(Firewall fw)
     {
         // 9 inches apart, perfectly parallel to the center plane, and the front is .25 inches higher than the rear
         ControlArm lower = new ControlArm {
@@ -80,6 +79,8 @@ class Program
             shock = shock
         };
 
+        Toebox tb = new Toebox(fs, fw);
+        await tb.Start();
 
         // upper_arm_shock_mount: (11, 20,75, 19) >> (4, 20.75, 5.5)
         // chassis_shock_mount: (20.5, 8.75, 32) >> (-5.5, 8.75, 19)
