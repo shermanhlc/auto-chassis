@@ -52,6 +52,10 @@ class Program
         await Task.WhenAll(t_firewall); // <-- add other parts here to run concurrently (t_firewall, t_other, t_another)
 
         await TestGroundSuspension(fw);
+
+        Printer.PrintPointWithLabel(fw.BR, "BR");
+        Printer.PrintPointWithLabel(fw.AR, "AR");
+        Printer.PrintPointWithLabel(fw.SR, "SR");
     }
 
     public static async Task TestGroundSuspension(Firewall fw)
@@ -68,8 +72,8 @@ class Program
         };
 
         Shock shock = new Shock {
-            upper = new Point(4, 20.75, 5.5), // < this point does not matter and probably is never used
-            lower = new Point(-5.5, 8.75, 19)
+            lower = new Point(4, 20.75, 5.5), // < this point does not matter and probably is never used
+            upper = new Point(-5.5, 8.75, 19)
         };
 
 
@@ -81,6 +85,17 @@ class Program
 
         Toebox tb = new Toebox(fs, fw);
         await tb.Start();
+
+        Printer.PrintPointWithLabel(tb.DR, "DR");
+        Printer.PrintPointWithLabel(tb.DL, "DL");
+        Printer.PrintPointWithLabel(tb.ER, "ER");
+        Printer.PrintPointWithLabel(tb.EL, "EL");
+        Printer.PrintPointWithLabel(tb.FR, "FR");
+        Printer.PrintPointWithLabel(tb.FL, "FL");
+        Printer.PrintPointWithLabel(tb.GR, "GR");
+        Printer.PrintPointWithLabel(tb.GL, "GL");
+        Printer.PrintPointWithLabel(tb.CDR, "CDR");
+        Printer.PrintPointWithLabel(tb.CDL, "CDL");
 
         // upper_arm_shock_mount: (11, 20,75, 19) >> (4, 20.75, 5.5)
         // chassis_shock_mount: (20.5, 8.75, 32) >> (-5.5, 8.75, 19)

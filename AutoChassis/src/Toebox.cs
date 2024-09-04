@@ -46,18 +46,7 @@ namespace AutoChassis
         {
             BuildRearBar();
             BuildFrontBar();
-
-            Printer.PrintPointWithLabel(DR, "DR");
-            Printer.PrintPointWithLabel(DL, "DL");
-            Printer.PrintPointWithLabel(ER, "ER");
-            Printer.PrintPointWithLabel(EL, "EL");
-            Printer.PrintPointWithLabel(FR, "FR");
-            Printer.PrintPointWithLabel(FL, "FL");
-            Printer.PrintPointWithLabel(GR, "GR");
-            Printer.PrintPointWithLabel(GL, "GL");
-
-            Printer.PrintPointWithLabel(CDR, "CDR");
-            Printer.PrintPointWithLabel(CDL, "CDL");
+            ShockMount();
         }
 
         public void FindLegAngle()
@@ -135,12 +124,6 @@ namespace AutoChassis
             CDR = front_suspension.shock.upper;
             CDL = new Point(CDR.x, -CDR.y, CDR.z);
         }
-
-        public void AdjustSIMLength(double sim_length)
-        {
-
-        }
-
     }
 }
 
