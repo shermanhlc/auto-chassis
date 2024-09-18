@@ -7,11 +7,13 @@ using Suspension;
 
 class Program
 {
-    public static string version_number = "v0.1.0";
+    public const string version_number = "v0.1.0";
+    public static string APP_DIR { get { return AppContext.BaseDirectory; } }
     private static int sleep = 00;
     public static async Task Main(string[] args)
     {
-        await OnStart();
+
+        await BootupDisplay();
 
         string? input;
         while(true)
@@ -44,8 +46,7 @@ class Program
             BR = new Point(0, 0),
             BL = new Point(0, 1),
             tolerance = Input.GetTolerance() + 1,
-            driver = Input.GetDriver(),
-            interation_step = .01
+            driver = Input.GetDriver()
         };
 
         Task t_firewall = fw.Start();
@@ -101,7 +102,7 @@ class Program
         // chassis_shock_mount: (20.5, 8.75, 32) >> (-5.5, 8.75, 19)
     }
 
-    public static async Task OnStart()
+    public static async Task BootupDisplay()
     {
         Console.Clear();
         await Task.Delay(sleep * 3);

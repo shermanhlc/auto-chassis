@@ -1,0 +1,18 @@
+### This configuration defines the parameters the program will use to ensure rule compliance
+#   Assume values are in inches unless otherwise specified, or no unit is needed
+#
+#! IMPORTANT !! 
+#! Ensure these values match those defined by the current rulebook
+
+
+[clearance]
+head=6           # clearance required from the head/helmet
+body=3           # clearance required from the body
+
+[rules]
+lateral=8        # minimum length of lateral members
+vertical=42      # minimum height from the seat bottom to the roll hoop overhead member
+
+[process]
+interation=0.01  # step used by optimizer, smaller number is more accurate but will increase compute time exponentially
+sleep=0          # time (ms) delayed between intro text prints
