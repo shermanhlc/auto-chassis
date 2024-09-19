@@ -39,13 +39,7 @@ class Program
 
     public static async Task TestGround()
     {
-        Firewall fw = new Firewall
-        {
-            BR = new Point(0, 0),
-            BL = new Point(0, 1),
-            tolerance = Input.GetTolerance() + 1,
-            driver = Input.GetDriver()
-        };
+        Firewall fw = new(Input.GetTolerance(), 4, 13.6, Input.GetDriver());
 
         Task t_firewall = fw.Start();
         await Task.WhenAll(t_firewall); // <-- add other parts here to run concurrently (t_firewall, t_other, t_another)
