@@ -7,11 +7,11 @@ using Suspension;
 
 class Program
 {
-    public static string version_number = "v0.1.0";
-    private static int sleep = 00;
+    public const string version_number = "v0.1.0";  // move this to a version file?
     public static async Task Main(string[] args)
     {
-        await OnStart();
+
+        await BootupDisplay();
 
         string? input;
         while(true)
@@ -44,8 +44,7 @@ class Program
             BR = new Point(0, 0),
             BL = new Point(0, 1),
             tolerance = Input.GetTolerance() + 1,
-            driver = Input.GetDriver(),
-            interation_step = .01
+            driver = Input.GetDriver()
         };
 
         Task t_firewall = fw.Start();
@@ -101,29 +100,29 @@ class Program
         // chassis_shock_mount: (20.5, 8.75, 32) >> (-5.5, 8.75, 19)
     }
 
-    public static async Task OnStart()
+    public static async Task BootupDisplay()
     {
         Console.Clear();
-        await Task.Delay(sleep * 3);
+        await Task.Delay(SLEEP * 3);
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"Auto Chassis {version_number}");
 
         Console.ForegroundColor = ConsoleColor.White;
         for (int i = 0; i < 3; i++)
         {
-            await Task.Delay(sleep);
+            await Task.Delay(SLEEP);
             Console.Write(". ");
         }
         Console.Write("\n");
 
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("Developed by Sam Sherman");
-        await Task.Delay(sleep);
+        await Task.Delay(SLEEP);
         Console.WriteLine("Auto Chassis is a tool for designing and building custom chassis to meet the specifications set by SAE for the Baja compeition.");
-        await Task.Delay(sleep);
+        await Task.Delay(SLEEP);
         Console.WriteLine("This tool has been made to meet the requirements for the 2024-2025 season, and may need to be updated for future seasons.");
         Console.WriteLine("\n");
-        await Task.Delay(sleep * 2);
+        await Task.Delay(SLEEP * 2);
 
         Printer.MultipleColor(["To view the available commands, type '", "h", "' or '", "help", "' and press enter.\n"], [ConsoleColor.White, ConsoleColor.Blue, ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White]);
     }
