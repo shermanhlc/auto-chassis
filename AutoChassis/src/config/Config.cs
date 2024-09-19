@@ -17,7 +17,7 @@ public static class Config
 
     // process
     public static readonly double ITERATION_STEP;
-    public static readonly double SLEEP;
+    public static readonly int SLEEP;
 
 
     static Config() 
@@ -75,7 +75,7 @@ public static class Config
                 if (process != null)
                 {
                     ITERATION_STEP = (double)process["step"];
-                    SLEEP = (double)process["sleep"];
+                    SLEEP = (int)process["sleep"];
                 }
                 else
                 {
