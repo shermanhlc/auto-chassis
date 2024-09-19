@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consider the ass size
 - Consider the tube length
 
+## [alpha 0.2.2] 2024-09-18
+### Added
+- `config.toml` for const variables
+- class `Config.cs` to check validity of the `config.toml`
+- custom error types
+### Changed
+- shuffled file directory structure
+
 ## [alpha 0.2.1] 2024-08-25
 ### Added
 - Shock mount points are saved as part of the toebox
