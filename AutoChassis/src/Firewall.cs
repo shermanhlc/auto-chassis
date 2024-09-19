@@ -5,29 +5,29 @@ using Utilities;
 
 namespace AutoChassis
 {
-    public class Firewall
-    {
-        // TODO: add checks
+    // TODO: change side member height to not be a const
+    // TODO: add checks
             // - the width exceeds 29" at 27" above the seat bottom
             // - lateral cross members exceed 8"
-        // TODO: add inputs for seat bottom, side member height, tolerance, interation
-        // TODO: clean up the code
+    // // TODO: add inputs for seat bottom, side member height, tolerance, interation
+    // // TODO: clean up the code
 
-        // these should be moved to a easily modifiable configuration file, so new versions of the rules can be easily implemented
-        const double HEAD_CLEARANCE = 6;
-        const double BODY_CLEARANCE = 3;
-        const double SIDE_MEMBER_HEIGHT = 13.6;
-        const double MIN_LATERAL_LENGTH = 8;
+    public class Firewall
+    {
+        
+
+        // this should be a user given value
+        public double sim_height { get; set; }
         /// <summary>
         /// an additive value that is added to the calculated values to account for manufacturing or measurement error
         /// </summary>
-        /// <remarks> between 0 and 1, 0 denotes no tolerance and will produce exact dimensions that do not account for differences in drivers </remarks>
+        /// <remarks> greater than 1, 1 denotes no tolerance and will produce exact dimensions that do not account for differences in drivers </remarks>
         public double tolerance { get; set; }
         /// <summary>
         /// the step size for the iterative process
         /// </summary>
         /// <remarks> defaults to 0.01, lower value will increase accuracy but also significantly increase computation time </remarks>
-        public double interation_step { get; set; }
+        public double ITERATION_STEP { get; set; }
 
         // inputs
         public Driver driver { get; set; }
@@ -48,10 +48,25 @@ namespace AutoChassis
         public Point AR { get; set; } // x > 4 requried by the rules
         public Point AL { get; set; }
 
-        public Firewall()
+        public Firewall(double tolerance, double seat_height, double sim_height, Driver driver)
         {
-            // tolerance = tolerance + 1;
-            // interation_step = interation_step;
+            this.tolerance = tolerance;
+            this.driver = driver;
+            this.seat_height = seat_height;
+            this.sim_height = sim_height;
+
+            this.helmet_center = CalculateHelmetCenter();
+            this.shoulder_point = CalculateShoulderPoint();
+            this.elbow_point = CalculateElbowPoint();
+            this.hip_point = CalculateHipPoint();
+
+            Point zero_zero = new Point(0, 0);
+            BR = zero_zero;
+            BL = zero_zero;
+            SR = zero_zero;
+            SL = zero_zero;
+            AR = zero_zero;
+            AL = zero_zero;
         }
 
         public async Task Start()
@@ -60,7 +75,6 @@ namespace AutoChassis
             // get my tolerances
             // get my driver
             // get seat height
-            seat_height = 4;
 
             DetermineLineB();
             
@@ -69,31 +83,6 @@ namespace AutoChassis
 
             await Task.WhenAll(calcLineA);
             Console.WriteLine("finished calculations for firewall");
-            Printer.PrintPointWithLabel(BR, "BR");
-            Printer.PrintPointWithLabel(SR, "SR");
-            Printer.PrintPointWithLabel(AR, "AR");
-            Console.Write('\n');
-            Printer.PrintPointWithLabel(shoulder_point, "shoulder point");
-        }
-
-        public void CalculatePermeter()
-        {
-            Console.WriteLine("calculating perimeter of firewall");
-        }
-
-        public double BLength()
-        {
-            return Equations.Length(BL, BR);
-        }
-
-        public double SLength()
-        {
-            return Equations.Length(SL, SR);
-        }
-
-        public double ALength()
-        {
-            return Equations.Length(AL, AR);
         }
 
         // distance between the two points 27" above the seat must be minimum of 29" apart
@@ -111,9 +100,6 @@ namespace AutoChassis
 
         public void DetermineLineB()
         {
-            CaluclateHelmetCenter();
-            CalculateShoulderPoint();
-
             Point top_point = new Point(
                 0, // start in center
                 helmet_center.y + HEAD_CLEARANCE * tolerance,
@@ -124,7 +110,7 @@ namespace AutoChassis
             while (!clear)
             {
                 clear = true;
-                double totalPoints = Equations.Length(shoulder_point, top_point) / interation_step;
+                double totalPoints = Equations.Length(shoulder_point, top_point) / ITERATION_STEP;
 
                 for(int i = 0; i < totalPoints; i++)
                 {
@@ -132,7 +118,7 @@ namespace AutoChassis
                     Point p = Equations.Interpolation(top_point, shoulder_point, t);
                     if (!CheckHelmetClearance(p))
                     {
-                        top_point.x += interation_step;
+                        top_point.x += ITERATION_STEP;
                         clear = false;
                         break;
                     }
@@ -157,10 +143,7 @@ namespace AutoChassis
         /// <remarks>Requires DetermineLineB() to finishing run</remarks>
         public void DetermineLineA()
         {
-            CalculateElbowPoint();
-            CalculateHipPoint();
-
-            SR = Equations.PointAlongLineAtYValue(BR, shoulder_point, SIDE_MEMBER_HEIGHT + seat_height);
+            SR = Equations.PointAlongLineAtYValue(BR, shoulder_point, sim_height + seat_height);
 
             Point bottom_point = new Point(
                 0,
@@ -172,7 +155,7 @@ namespace AutoChassis
             while (!clear) 
             {
                 clear = true;
-                double totalPoints = Equations.Length(SR, bottom_point) / interation_step;
+                double totalPoints = Equations.Length(SR, bottom_point) / ITERATION_STEP;
 
                 for (int i = 0; i < totalPoints; i++)
                 {
@@ -180,13 +163,13 @@ namespace AutoChassis
                     Point p = Equations.Interpolation(SR, bottom_point, t);
                     if (!CheckElbowClearance(p))
                     {
-                        bottom_point.x += interation_step;
+                        bottom_point.x += ITERATION_STEP;
                         clear = false;
                         break;
                     }
                     else if (!CheckHipClearance(p))
                     {
-                        bottom_point.x += interation_step;
+                        bottom_point.x += ITERATION_STEP;
                         clear = false;
                         break;
                     }
@@ -220,7 +203,7 @@ namespace AutoChassis
             return Equations.Length(a, hip_point) > BODY_CLEARANCE * tolerance;
         }
 
-        public Point CaluclateHelmetCenter()
+        public Point CalculateHelmetCenter()
         {
             double helmet_radius = Equations.CircumferenceToRadius(driver.helmet_circumference);
             double x = 0;
