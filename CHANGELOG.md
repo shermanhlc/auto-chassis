@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consider the ass size
 - Consider the tube length
 
+## [alpha 0.2.3] 2024-09-19
+### Changed
+- `Firewall.cs` uses `config` instead of `const` variables
+- Better constructor for `Firewall` class
+
 ## [alpha 0.2.2] 2024-09-18
 ### Added
 - `config.toml` for const variables
