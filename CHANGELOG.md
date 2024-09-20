@@ -5,18 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Planned]
 ### Additions
 - **! PRIORITY !** Automatically make `.pts` files
 - Integrate `.toml` for config
 - Checks for toebox clearance
 - Rotate firewall to use the same x-y-z directionals
 - Rollcage based on shock mount
+
 ### Fixes
 - Firewall when at an angle reduces the height of the sims
 - Offset for suspension points not accounted for
 - Consider the ass size
 - Consider the tube length
+
+### Minor Pieces
+- `ManPage.Help()` should use `Printer` class
+- GitHub PR lock if `CHANGELOG.md` and `VERSION` are unchanged
+
+## [Unreleased]
+### Added
+- `VERSION` file
+- command line arguments
+### Changed
+### Fixed
 
 ## [alpha 0.2.2] 2024-09-18
 ### Added

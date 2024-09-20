@@ -1,39 +1,51 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using Utilities;
+
 using AutoChassis;
+using IO;
 using Suspension;
+using Utilities;
 
 class Program
 {
     public const string version_number = "v0.1.0";  // move this to a version file?
+    public static readonly string EMPTY_ERR = "This exception should be described manually when caught";
     public static async Task Main(string[] args)
     {
+        try {
+            if(args.Length == 0) {
+                throw new ArgumentException(EMPTY_ERR);
+            }
 
-        await BootupDisplay();
+            foreach(string arg in args) 
+            {
+                switch(arg.ToLower()) 
+                {
+                    case "--help":
+                    case "-h":
+                        ManPage.Help();
+                        break;
 
-        string? input;
-        while(true)
-        {
-            input = Input.Put();
+                    case "--version":
+                    case "-v":
+                        if (File.Exists("VERSION"))
+                        Printer.PrintSingleLineColor(version_number, ConsoleColor.White);
+                        break;
 
-            if (input == "q" || input == "quit") {
-                Printer.PrintSingleLineColor("Exiting...", ConsoleColor.Red, true);
-                break;
-            }
-            else if (input == "a" || input == "assist") {
+                    case "--test":
+                    case "-t":
+                        await TestGround();
+                        break;
 
+                    default:
+                        Printer.MultipleColor(["Invalid argument: ", arg, "\nUse ", "--help", " to see available options" ], [ConsoleColor.Red, ConsoleColor.Cyan, ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White]);
+                        break;
+                }
             }
-            else if (input == "h" || input == "help") {
-                Console.WriteLine("This is the help menu, it will display the available commands and their functions.");
-            }
-            else if (input == "t" || input == "test") {
-                await TestGround();
-            }
-            else {
-                Printer.MultipleColor(["Invalid input: ", input, " is not a valid command"], [ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White]);
-            }
+        }
+        catch (ArgumentException) {
+            Printer.MultipleColor(["No arguments provided. ",  "Use ", "--help", " to see available options" ], [ConsoleColor.Red, ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White]);
         }
     }
 
