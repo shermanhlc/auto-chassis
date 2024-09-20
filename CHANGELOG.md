@@ -23,12 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ManPage.Help()` should use `Printer` class
 - GitHub PR lock if `CHANGELOG.md` and `VERSION` are unchanged
 
-## [Unreleased]
+## [alpha 0.2.3] 2024-09-20
 ### Added
 - `VERSION` file
-- command line arguments
 ### Changed
-### Fixed
+- No longer a "live" program. Uses arguments from the command line instead as, as this will be more helpful in the case of a TUI
 
 ## [alpha 0.2.2] 2024-09-18
 ### Added
