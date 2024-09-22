@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [alpha 0.2.3] 2024-09-20
 ### Added
-- `VERSION` file
+- `VERSION` file embedded within the binary
 ### Changed
 - No longer a "live" program. Uses arguments from the command line instead as, as this will be more helpful in the case of a TUI
 
