@@ -1,39 +1,66 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using Utilities;
+
 using AutoChassis;
+using IO;
 using Suspension;
+using Utilities;
 
 class Program
 {
-    public const string version_number = "v0.1.0";  // move this to a version file?
+    public static string version_number = GetVersionNumber();
+    public static readonly string EMPTY_ERR = "This exception should be described manually when caught";
     public static async Task Main(string[] args)
     {
+        try {
+            version_number = GetVersionNumber();
 
-        await BootupDisplay();
+            if(args.Length == 0) {
+                throw new ArgumentException(EMPTY_ERR);
+            }
 
-        string? input;
-        while(true)
-        {
-            input = Input.Put();
+            foreach(string arg in args) 
+            {
+                switch(arg.ToLower()) 
+                {
+                    case "--help":
+                    case "-h":
+                        ManPage.Help();
+                        break;
 
-            if (input == "q" || input == "quit") {
-                Printer.PrintSingleLineColor("Exiting...", ConsoleColor.Red, true);
-                break;
-            }
-            else if (input == "a" || input == "assist") {
+                    case "--version":
+                    case "-v":
+                        Printer.PrintSingleLineColor(version_number, ConsoleColor.White);
+                        break;
 
+                    case "--test":
+                    case "-t":
+                        await TestGround();
+                        break;
+
+                    default:
+                        Printer.MultipleColor(["Invalid argument: ", arg, "\nUse ", "--help", " to see available options" ], [ConsoleColor.Red, ConsoleColor.Cyan, ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White]);
+                        break;
+                }
             }
-            else if (input == "h" || input == "help") {
-                Console.WriteLine("This is the help menu, it will display the available commands and their functions.");
-            }
-            else if (input == "t" || input == "test") {
-                await TestGround();
-            }
-            else {
-                Printer.MultipleColor(["Invalid input: ", input, " is not a valid command"], [ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White]);
-            }
+        }
+        catch (ArgumentException) {
+            Printer.MultipleColor(["No arguments provided. ",  "Use ", "--help", " to see available options" ], [ConsoleColor.Red, ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White]);
+        }
+    }
+
+    private static string GetVersionNumber()
+    {
+        var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+        using Stream? stream = assembly.GetManifestResourceStream("AutoChassis.VERSION");
+
+        if (stream == null) {
+            return "VERSION-null";
+        }
+
+        using StreamReader reader = new(stream); {
+            return reader.ReadToEnd();
         }
     }
 
@@ -94,30 +121,37 @@ class Program
         // chassis_shock_mount: (20.5, 8.75, 32) >> (-5.5, 8.75, 19)
     }
 
-    public static async Task BootupDisplay()
-    {
-        Console.Clear();
-        await Task.Delay(SLEEP * 3);
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine($"Auto Chassis {version_number}");
 
-        Console.ForegroundColor = ConsoleColor.White;
-        for (int i = 0; i < 3; i++)
-        {
-            await Task.Delay(SLEEP);
-            Console.Write(". ");
-        }
-        Console.Write("\n");
 
-        Console.ForegroundColor = ConsoleColor.White;
-        Console.WriteLine("Developed by Sam Sherman");
-        await Task.Delay(SLEEP);
-        Console.WriteLine("Auto Chassis is a tool for designing and building custom chassis to meet the specifications set by SAE for the Baja compeition.");
-        await Task.Delay(SLEEP);
-        Console.WriteLine("This tool has been made to meet the requirements for the 2024-2025 season, and may need to be updated for future seasons.");
-        Console.WriteLine("\n");
-        await Task.Delay(SLEEP * 2);
 
-        Printer.MultipleColor(["To view the available commands, type '", "h", "' or '", "help", "' and press enter.\n"], [ConsoleColor.White, ConsoleColor.Blue, ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White]);
-    }
+
+
+
+
+    // public static async Task BootupDisplay()
+    // {
+    //     Console.Clear();
+    //     await Task.Delay(SLEEP * 3);
+    //     Console.ForegroundColor = ConsoleColor.Yellow;
+    //     Console.WriteLine($"Auto Chassis {version_number}");
+
+    //     Console.ForegroundColor = ConsoleColor.White;
+    //     for (int i = 0; i < 3; i++)
+    //     {
+    //         await Task.Delay(SLEEP);
+    //         Console.Write(". ");
+    //     }
+    //     Console.Write("\n");
+
+    //     Console.ForegroundColor = ConsoleColor.White;
+    //     Console.WriteLine("Developed by Sam Sherman");
+    //     await Task.Delay(SLEEP);
+    //     Console.WriteLine("Auto Chassis is a tool for designing and building custom chassis to meet the specifications set by SAE for the Baja compeition.");
+    //     await Task.Delay(SLEEP);
+    //     Console.WriteLine("This tool has been made to meet the requirements for the 2024-2025 season, and may need to be updated for future seasons.");
+    //     Console.WriteLine("\n");
+    //     await Task.Delay(SLEEP * 2);
+
+    //     Printer.MultipleColor(["To view the available commands, type '", "h", "' or '", "help", "' and press enter.\n"], [ConsoleColor.White, ConsoleColor.Blue, ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White]);
+    // }
 }
