@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `VERSION` file embedded within the binary
 ### Changed
 - No longer a "live" program. Uses arguments from the command line instead as, as this will be more helpful in the case of a TUI
+- `Firewall.cs` uses `config` instead of `const` variables
+- Better constructor for `Firewall` class
 
 ## [alpha 0.2.2] 2024-09-18
 ### Added
