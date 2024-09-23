@@ -1,0 +1,4 @@
+{
+    "name": "Require CHANGELOG and VERSION Modification",
+    "description": "Require changes to be made to the CHANGELOG and VERSION for a PR to be merged"
+}
