@@ -1,0 +1,17 @@
+name: Second Workflow
+
+on:
+  workflow_run:
+    workflows: ["First Workflow"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Run deployment step
+        run: echo "This is the second workflow, called after the first!"
