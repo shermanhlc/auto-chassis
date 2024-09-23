@@ -1,6 +1,10 @@
 name: Require CHANGELOG and VERSION Modification
 
 on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, edited, synchronize, reopened]
   workflow_dispatch: {}
 
 # on:
