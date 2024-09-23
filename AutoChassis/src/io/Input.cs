@@ -58,7 +58,6 @@ namespace Utilities
 
             Console.WriteLine("Enter driver information...");
             Console.WriteLine("These driver dimensions should be for the largest driver intending to use the vehicle.");
-            Thread.Sleep(400);
 
             Printer.SplitColor("Helment circumference ", ConsoleColor.Green, "(front facing): ", ConsoleColor.White);
             while ((line = Put()) != null)

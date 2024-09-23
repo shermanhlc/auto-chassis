@@ -48,6 +48,9 @@ class Program
         catch (ArgumentException) {
             Printer.MultipleColor(["No arguments provided. ",  "Use ", "--help", " to see available options" ], [ConsoleColor.Red, ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White]);
         }
+        catch (Exception e) {
+            Printer.MultipleColor(["An error occurred: ", e.Message], [ConsoleColor.Red, ConsoleColor.White]);
+        }
     }
 
     private static string GetVersionNumber()
