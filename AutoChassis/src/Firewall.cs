@@ -27,7 +27,6 @@ namespace AutoChassis
         /// the step size for the iterative process
         /// </summary>
         /// <remarks> defaults to 0.01, lower value will increase accuracy but also significantly increase computation time </remarks>
-        public double ITERATION_STEP { get; set; }
 
         // inputs
         public Driver driver { get; set; }
@@ -150,7 +149,6 @@ namespace AutoChassis
                 0,
                 0 // not implemented yet
             );
-
             bool clear = false;
             while (!clear) 
             {

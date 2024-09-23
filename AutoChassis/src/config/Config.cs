@@ -17,7 +17,7 @@ public static class Config
 
     // process
     public static readonly double ITERATION_STEP;
-    public static readonly int SLEEP;
+    public static readonly double SLEEP;
 
 
     static Config() 
@@ -46,9 +46,8 @@ public static class Config
                 // find all necessary key-value pairs
                 TomlTable toml = toml_parse.ToModel();
 
-                TomlTable? clearance = toml["clearance"] as TomlTable;
 
-                if (clearance != null)
+                if (toml["clearance"] is TomlTable clearance)
                 {
                     HEAD_CLEARANCE = (double)clearance["head"];
                     BODY_CLEARANCE = (double)clearance["body"];
@@ -58,9 +57,8 @@ public static class Config
                     throw new MissingTomlKeyException("clearance table not found in config.toml");
                 }
 
-                TomlTable? rules = toml["rules"] as TomlTable;
 
-                if (rules != null)
+                if (toml["rules"] is TomlTable rules)
                 {
                     MIN_LATERAL_LENGTH = (double)rules["lateral"];
                     MIN_VERTICAL_HEIGHT = (double)rules["vertical"];
@@ -74,8 +72,7 @@ public static class Config
 
                 if (process != null)
                 {
-                    ITERATION_STEP = (double)process["step"];
-                    SLEEP = (int)process["sleep"];
+                    ITERATION_STEP = (double)process["iteration_step"];
                 }
                 else
                 {
@@ -87,25 +84,30 @@ public static class Config
                 throw new FileNotFoundException("No config.toml was found. Ensure the configuration file meets the requirements (consult the README) and is located in the same directory as the program.");
             }
         }
+        catch (FileNotFoundException e)
+        {
+            Printer.PrintSingleLineColor(e.Message, ConsoleColor.Red);
+            Environment.Exit(10);
+        }
         catch (BadTomlParseException e)
         {
-            Printer.PrintSingleLineColor(e.Message, ConsoleColor.Red, true);
+            Printer.PrintSingleLineColor(e.Message, ConsoleColor.Red);
             Environment.Exit(11);
         }
         catch (MissingTomlKeyException e)
         {
-            Printer.PrintSingleLineColor(e.Message, ConsoleColor.Red, true);
+            Printer.PrintSingleLineColor(e.Message, ConsoleColor.Red);
             Environment.Exit(12);
         }
-        
-        catch (FileNotFoundException e)
+        catch (InvalidCastException e)
         {
-            Printer.PrintSingleLineColor(e.Message, ConsoleColor.Red, true);
-            Environment.Exit(10);
+            Printer.PrintSingleLineColor(e.Message, ConsoleColor.Red);
+            Printer.PrintSingleLineColor("Could not cast config value, this is most likely due to a number not being a floating point value.", ConsoleColor.White);
+            Environment.Exit(13);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine($"General configuration error: {e.Message}");
             Environment.Exit(1);           // general error
         }
         

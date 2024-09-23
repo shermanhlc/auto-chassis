@@ -16,6 +16,7 @@ namespace Utilities
                     return d;
                 }
             } catch (FormatException) {
+                Printer.PrintSingleLineColor("Invalid input.", ConsoleColor.Red);
                 return -1;
             }
         }
