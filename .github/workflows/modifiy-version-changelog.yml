@@ -2,10 +2,15 @@ name: Require CHANGELOG and VERSION Modification
 
 on:
   pull_request:
-    paths:
-      - 'CHANGELOG.md'
-      - 'VERSION'
-    types: [opened, edited, synchronize]
+    branches:
+      - main
+    types: [opened, edited, synchronize, reopened]
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#     types: [opened, edited, synchronize]
 
 jobs:
   check-files:
@@ -13,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
