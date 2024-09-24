@@ -6,12 +6,6 @@ on:
       - main
     types: [opened, edited, synchronize, reopened]
 
-# on:
-#   pull_request:
-#     branches:
-#       - main
-#     types: [opened, edited, synchronize]
-
 jobs:
   check-files:
     runs-on: ubuntu-latest
