@@ -5,15 +5,12 @@ namespace AutoChassis
 {
     public class Toebox
     {
-        const double BODY_CLEARANCE = 3;
-
         double tolerance { get; set; }
-        double interation_step { get; set; }
 
         public Driver driver { get; set; }
         
         // distance from the tip of the nose to the pedal surface (foot contant point)
-        public double pedal_position { get; set; }
+        // public double pedal_position { get; set; }
 
         // points
         // upper rear points
@@ -36,14 +33,22 @@ namespace AutoChassis
         FrontSuspension front_suspension { get; set; }
         Firewall firewall { get; set; }
 
-        public Toebox(FrontSuspension fs, Firewall fw)
+        public Toebox(double tolerance, Driver driver, FrontSuspension fs, Firewall fw)
         {
+            this.tolerance = tolerance;
+            this.driver = driver;
+
             firewall = fw;
             front_suspension = fs;
+
+            Point zero_zero = new(0, 0);
+            DR = DL = ER = EL = FR = FL = GR = GL = CDR = CDL = zero_zero;  // set all points to origin for initialization
         }
 
         public async Task Start()
         {
+            await Task.Delay(10);
+
             BuildRearBar();
             BuildFrontBar();
             ShockMount();

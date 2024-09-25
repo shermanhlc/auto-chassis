@@ -18,19 +18,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Offset for suspension points not accounted for
 - Consider the ass size
 - Consider the tube length
+- `Parser.cs` should notify for failures
 
 ### Minor Pieces
 - `ManPage.Help()` should use `Printer` class
 
-## [alpha 0.2.3] 2024-09-23
+## [alpha 0.2.3] 2024-09-25
 ### Added
 - `VERSION` file embedded within the binary
+- `IO` directory for related files
+- Default constructors for necessary classes
 ### Changed
 - No longer a "live" program. Uses arguments from the command line instead as, as this will be more helpful in the case of a TUI
-- `Firewall.cs` uses `config` instead of `const` variables
-- Better constructor for `Firewall` class
+- Major refactor:
+    - use of `config.toml` values instead of local `const` variables
+    - moved input-output `IO` namespace instead of lumping all input-output helpers within `Utilities`
 ### Fixed
 - Cast error from `config.toml`
+- Warnings for possible null values on non-null data types
 
 ## [alpha 0.2.2] 2024-09-18
 ### Added

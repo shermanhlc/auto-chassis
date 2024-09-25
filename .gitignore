@@ -1,6 +1,7 @@
 .vscode/
 [Bb]in/
 [Oo]bj/
+.editorconfig
 
 # output files
 data/

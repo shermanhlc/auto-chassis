@@ -106,7 +106,7 @@ class Program
             shock = shock
         };
 
-        Toebox tb = new Toebox(fs, fw);
+        Toebox tb = new(fw.tolerance, fw.driver, fs, fw);
         await tb.Start();
 
         Printer.PrintPointWithLabel(tb.DR, "DR");

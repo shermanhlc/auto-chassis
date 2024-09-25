@@ -2,8 +2,8 @@ namespace Suspension
 {
     public class FrontSuspension
     {
-        public ControlArm upper_arm { get; set; }
-        public ControlArm lower_arm { get; set; }
-       public Shock shock { get; set; }
+        public ControlArm upper_arm = new ControlArm();
+        public ControlArm lower_arm = new ControlArm();
+        public Shock shock = new Shock();
     }
 }
