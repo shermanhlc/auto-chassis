@@ -1,7 +1,6 @@
-using System.Drawing;
-using System.Text;
+using Utilities;
 
-namespace Utilities
+namespace IO
 {
     public class Printer
     {

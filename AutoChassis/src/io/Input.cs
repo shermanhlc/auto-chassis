@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
+using Utilities;
 
-namespace Utilities
+namespace IO
 {
     public static class Input
     {

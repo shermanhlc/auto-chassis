@@ -4,7 +4,11 @@ namespace Suspension
 {
     public class Shock
     {
-        public Point upper { get; set; }
-        public Point lower { get; set; }
+        public Point upper = new Point();
+        public Point lower = new Point();
+
+        public Shock()
+        {
+        }
     }
 }

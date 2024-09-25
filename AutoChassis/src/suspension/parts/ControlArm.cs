@@ -4,7 +4,11 @@ namespace Suspension
 {
     public class ControlArm
     {
-        public Point front { get; set; }
-        public Point rear { get; set; }
+        public Point front = new Point();
+        public Point rear = new Point();
+
+        public ControlArm()
+        {
+        }
     }
 }
