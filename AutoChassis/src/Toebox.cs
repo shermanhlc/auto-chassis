@@ -45,10 +45,10 @@ namespace AutoChassis
             DR = DL = ER = EL = FR = FL = GR = GL = CDR = CDL = zero_zero;  // set all points to origin for initialization
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task Start()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            await Task.Delay(10);
-
             BuildRearBar();
             BuildFrontBar();
             ShockMount();
