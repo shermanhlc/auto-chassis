@@ -9,28 +9,36 @@ namespace Utilities
             try {
                 double d = double.Parse(str);
                 if (zeroPermitted && d < 0) {
-                    return -1;
+                    throw new ArgumentOutOfRangeException("Value must be greater than or equal to 0");
                 }
                 else if (!zeroPermitted && d <= 0) {
-                    return -1;
+                    throw new ArgumentOutOfRangeException("Value must be greater than 0");
                 }
                 else {
                     return d;
                 }
             } catch (FormatException) {
-                Printer.PrintSingleLineColor("Invalid input.", ConsoleColor.Red);
-                return -1;
+                throw;
             }
         }
 
         public static double ParseDoubleRange(string str, double min, double max)
-        {
-            double d = ParseDouble(str, true);
-            if (d >= min && d <= max) {
-                return d;
+        {   
+            try {
+                double d = ParseDouble(str, true);
+
+                if (d < min || d > max) {
+                    throw new ArgumentOutOfRangeException($"Value must be between {min} and {max}");
+                }
+                else {
+                    return d;
+                }
             }
-            else {
-                return -1;
+            catch (FormatException) {
+                throw;
+            }
+            catch (ArgumentOutOfRangeException) {
+                throw;
             }
         }
     }

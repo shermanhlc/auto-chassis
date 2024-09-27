@@ -32,8 +32,11 @@ namespace IO
             Printer.MultipleColor(["Enter ", "tolerance", ": "], [ConsoleColor.White, ConsoleColor.Green, ConsoleColor.White], false);
             while ((line = Put()) != null)
             {
-                t = Parser.ParseDoubleRange(line, 0, 1);
-                if (t == -1)
+                try
+                {
+                    t = Parser.ParseDoubleRange(line, 0, 1);
+                }
+                catch (Exception)
                 {
                     { // invalid input
                         Console.Clear();
@@ -42,10 +45,6 @@ namespace IO
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     Printer.MultipleColor(["Enter ", "tolerance", ": "], [ConsoleColor.White, ConsoleColor.Green, ConsoleColor.White], false);
-                }
-                else
-                {
-                    break;
                 }
             }
 
@@ -62,8 +61,10 @@ namespace IO
             Printer.SplitColor("Helment circumference ", ConsoleColor.Green, "(front facing): ", ConsoleColor.White);
             while ((line = Put()) != null)
             {
-                driver.helmet_circumference = Parser.ParseDouble(line);
-                if (driver.helmet_circumference == -1)
+                try {
+                    driver.helmet_circumference = Parser.ParseDoubleRange(line, 0, 100);
+                }
+                catch (Exception)
                 {
                     { // invalid input
                         Console.Clear();
@@ -73,71 +74,64 @@ namespace IO
                     }
                     Printer.SplitColor("\rHelment circumference ", ConsoleColor.Green, "(front facing): ", ConsoleColor.White);
                 }
-                else
-                {
-                    break;
-                }
             }
 
             Printer.PrintSingleLineColor("Shoulder width: ", ConsoleColor.Green, false);
             while ((line = Put()) != null)
             {
-                driver.shoulder_width = Parser.ParseDouble(line);
-                if (driver.shoulder_width == -1)
+                try{
+                    driver.shoulder_width = Parser.ParseDoubleRange(line, 0, 100);
+                }
+                catch (Exception)
                 {
                     { // invalid input
+                        Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(invalid_number);
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     Printer.PrintSingleLineColor("\rShoulder width: ", ConsoleColor.Green, false);
                 }
-                else
-                {
-                    break;
-                }
             }
 
             Printer.PrintSingleLineColor("Upper arm length: ", ConsoleColor.Green, false);
             while ((line = Put()) != null)
             {
-                driver.upper_arm_length = Parser.ParseDouble(line);
-                if (driver.upper_arm_length == -1)
+                try {
+                    driver.upper_arm_length = Parser.ParseDoubleRange(line, 0, 100);
+                }
+                catch (Exception)
                 {
                     { // invalid input
+                        Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(invalid_number);
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     Printer.PrintSingleLineColor("\rUpper arm length: ", ConsoleColor.Green, false);
                 }
-                else
-                {
-                    break;
-                }
             }
 
             Printer.PrintSingleLineColor("Back height: ", ConsoleColor.Green, false);
             while ((line = Put()) != null)
             {
-                driver.back_height = Parser.ParseDouble(line);
-                if (driver.back_height == -1)
+                try {
+                    driver.back_height = Parser.ParseDoubleRange(line, 0, 100);
+                }
+                catch (Exception)
                 {
                     { // invalid input
+                        Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(invalid_number);
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                     Printer.PrintSingleLineColor("\rBack height: ", ConsoleColor.Green, false);
                 }
-                else
-                {
-                    break;
-                }
             }
 
             if (driver.helmet_circumference == 0 || driver.shoulder_width == 0 || driver.upper_arm_length == 0 || driver.back_height == 0) {
-                Console.WriteLine("Something went wrong when buiding the druver. Restart the process.");
+                Printer.PrintSingleLineColor("Something went wrong when buiding the druver. Restart the process.", ConsoleColor.Red);
             }
 
             return driver;

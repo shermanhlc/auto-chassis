@@ -14,7 +14,7 @@ namespace AutoChassis
 
     public class Firewall
     {
-        
+
 
         // this should be a user given value
         public double sim_height { get; set; }
