@@ -21,7 +21,7 @@ namespace AutoChassis.Tests
             );
             string binary_path = Path.GetFullPath(relative_path);
 
-            Console.WriteLine($"Binary Path: {binary_path}");
+            // Console.WriteLine($"Binary Path: {binary_path}");
 
 
             ProcessStartInfo start_info = new ProcessStartInfo
@@ -35,7 +35,7 @@ namespace AutoChassis.Tests
                 CreateNoWindow = true
             };
 
-            Console.WriteLine(start_info.FileName);
+            // Console.WriteLine(start_info.FileName);
 
             using (Process process = new Process { StartInfo = start_info })
             {

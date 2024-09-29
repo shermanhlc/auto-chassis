@@ -27,8 +27,7 @@ namespace AutoChassis.Tests
         [Fact]
         public void FailOnZeroWhenZeroNotPermitted()
         {
-            double result = Parser.ParseDouble("0.0", false);
-            Assert.Equal(-1.0, result);
+            Assert.Throws<ArgumentOutOfRangeException>(() => Parser.ParseDouble("0.0", false));
         }
 
         [Fact]
@@ -41,25 +40,21 @@ namespace AutoChassis.Tests
         [Fact]
         public void FailOnNegative()
         {
-            double result = Parser.ParseDouble("-4.0", true);
-            Assert.Equal(-1.0, result);
+            Assert.Throws<ArgumentOutOfRangeException>(() => Parser.ParseDouble("-4.0", false));
         }
 
         [Fact]
         public void FailOnNonNumeric()
         {
-            double result = Parser.ParseDouble("a", true);
-            Assert.Equal(-1.0, result);
+            Assert.Throws<FormatException>(() => Parser.ParseDouble("a", true));
 
-            double result2 = Parser.ParseDouble("a.0", true);
-            Assert.Equal(-1.0, result2);
+            Assert.Throws<FormatException>(() => Parser.ParseDouble("a.0", true));
         }
 
         [Fact]
         public void FailOnEmpty()
         {
-            double result = Parser.ParseDouble("", true);
-            Assert.Equal(-1.0, result);
+            Assert.Throws<FormatException>(() => Parser.ParseDouble("", true));
         }
 
         [Fact]
@@ -78,11 +73,8 @@ namespace AutoChassis.Tests
         [Fact]
         public void FailWhenOutOfRange()
         {
-            double result = Parser.ParseDoubleRange("3.0", 0.0, 2.0);
-            Assert.Equal(-1.0, result);
-
-            double result2 = Parser.ParseDoubleRange("-1.0", 0.0, 2.0);
-            Assert.Equal(-1.0, result2);
+            Assert.Throws<ArgumentOutOfRangeException>(() => Parser.ParseDoubleRange("3.0", 0.0, 2.0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Parser.ParseDoubleRange("-1.0", 0.0, 2.0));
         }
     }
 }
