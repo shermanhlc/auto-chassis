@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Minor Pieces
 - `ManPage.Help()` should use `Printer` class
+- `PTSBuilder.cs` does not clear a `.pts` file before appending new data to it
 
 ## [alpha 0.2.5] 2024-09-25
 ### Added
