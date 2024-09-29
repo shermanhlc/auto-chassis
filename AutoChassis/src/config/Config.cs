@@ -73,21 +73,11 @@ public static class Config
                 if (process != null)
                 {
                     ITERATION_STEP = (double)process["iteration_step"];
+                    OUTPUT_PATH = (string)process["output"];
                 }
                 else
                 {
                     throw new MissingTomlKeyException("process table not found in config.toml");
-                }
-
-                TomlTable? output_path = toml["output"] as TomlTable;
-
-                if (output_path != null)
-                {
-                    OUTPUT_PATH = (string)output_path["path"];
-                }
-                else
-                {
-                    throw new MissingTomlKeyException("output table not found in config.toml");
                 }
             }
             else

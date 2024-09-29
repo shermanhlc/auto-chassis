@@ -11,6 +11,7 @@ class Program
 {
     public static string version_number = GetVersionNumber();
     public static readonly string EMPTY_ERR = "This exception should be described manually when caught";
+
     public static async Task Main(string[] args)
     {
         try {
@@ -79,6 +80,7 @@ class Program
         Printer.PrintPointWithLabel(fw.BR, "BR");
         Printer.PrintPointWithLabel(fw.AR, "AR");
         Printer.PrintPointWithLabel(fw.SR, "SR");
+
     }
 
     public static async Task TestGroundSuspension(Firewall fw)
@@ -119,6 +121,27 @@ class Program
         Printer.PrintPointWithLabel(tb.GL, "GL");
         Printer.PrintPointWithLabel(tb.CDR, "CDR");
         Printer.PrintPointWithLabel(tb.CDL, "CDL");
+
+        SortedDictionary<string, Point> points = new() {
+            { "BR", fw.BR },
+            { "BL", fw.BL },
+            { "SR", fw.SR },
+            { "SL", fw.SL },
+            { "AR", fw.AR },
+            { "AL", fw.AL },
+            { "DR", tb.DR },
+            { "DL", tb.DL },
+            { "ER", tb.ER },
+            { "EL", tb.EL },
+            { "FR", tb.FR },
+            { "FL", tb.FL },
+            { "GR", tb.GR },
+            { "GL", tb.GL },
+            { "CDR", tb.CDR },
+            { "CDL", tb.CDL }
+        };
+
+        PTSBuilder.BuildPTSFile(points, "test.pts");
 
         // upper_arm_shock_mount: (11, 20,75, 19) >> (4, 20.75, 5.5)
         // chassis_shock_mount: (20.5, 8.75, 32) >> (-5.5, 8.75, 19)

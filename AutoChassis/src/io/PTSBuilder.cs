@@ -27,7 +27,7 @@ namespace IO
 
             foreach(KeyValuePair<string, Point> entry in points)
             {
-                string name = entry.Key;
+                string name = $"! {entry.Key}";
                 File.AppendAllText(path, name + "\n");
 
                 string line = string.Format("{0} {1} {2}", entry.Value.x, entry.Value.y, entry.Value.z);
