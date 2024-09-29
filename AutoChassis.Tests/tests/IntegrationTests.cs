@@ -45,7 +45,7 @@ namespace AutoChassis.Tests
                 using (StreamWriter writer = process.StandardInput)
                 using (StreamReader reader = new StreamReader(input_path))
                 {
-                    string line;
+                    string? line;
                     while ((line = reader.ReadLine()) != null)
                     {
                         writer.WriteLine(line);

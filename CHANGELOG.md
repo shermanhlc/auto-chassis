@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Planned]
 ### Additions
 - **! PRIORITY !** Automatically make `.pts` files
-- Integrate `.toml` for config
 - Checks for toebox clearance
 - Rotate firewall to use the same x-y-z directionals
 - Rollcage based on shock mount

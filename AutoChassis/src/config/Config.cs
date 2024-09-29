@@ -17,6 +17,7 @@ public static class Config
     // process
     public static readonly double ITERATION_STEP;
     public static readonly double SLEEP;
+    public static readonly string OUTPUT_PATH;
 
 
     static Config() 
@@ -76,6 +77,17 @@ public static class Config
                 else
                 {
                     throw new MissingTomlKeyException("process table not found in config.toml");
+                }
+
+                TomlTable? output_path = toml["output"] as TomlTable;
+
+                if (output_path != null)
+                {
+                    OUTPUT_PATH = (string)output_path["path"];
+                }
+                else
+                {
+                    throw new MissingTomlKeyException("output table not found in config.toml");
                 }
             }
             else

@@ -8,12 +8,13 @@
 
 
 [clearance]
-head=6.0            # clearance required from the head/helmet
-body=3.0             # clearance required from the body
+head=6.0  # clearance required from the head/helmet
+body=3.0  # clearance required from the body
 
 [rules]
-lateral=8.0          # minimum length of lateral members
-vertical=42.0        # minimum height from the seat bottom to the roll hoop overhead member
+lateral=8.0    # minimum length of lateral members
+vertical=42.0  # minimum height from the seat bottom to the roll hoop overhead member
 
 [process]
-iteration_step=0.01  # step used by optimizer, smaller number is more accurate but will increase compute time exponentially
+iteration_step=0.01        # step used by optimizer, smaller number is more accurate but will increase compute time exponentially
+output="chassis.pts"  # path for the finalized points file
