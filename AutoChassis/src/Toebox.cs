@@ -8,7 +8,7 @@ namespace AutoChassis
         double tolerance { get; set; }
 
         public Driver driver { get; set; }
-        
+
         // distance from the tip of the nose to the pedal surface (foot contant point)
         // public double pedal_position { get; set; }
 
