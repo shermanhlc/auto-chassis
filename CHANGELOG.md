@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Planned]
 ### Additions
-- **! PRIORITY !** Automatically make `.pts` files
 - Checks for toebox clearance
 - Rotate firewall to use the same x-y-z directionals
 - Rollcage based on shock mount
@@ -21,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Minor Pieces
 - `ManPage.Help()` should use `Printer` class
+
+## [alpha 0.2.5] 2024-09-25
+### Added
+- `PTSBuilder.cs` can now build a properly labeled `.pts` file
+- new config option: outout file path
+- `Program.cs` test ground now builds a `.pts` file
 
 ## [alpha 0.2.4] 2024-09-25
 ### Added
