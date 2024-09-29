@@ -35,6 +35,7 @@ namespace IO
                 try
                 {
                     t = Parser.ParseDoubleRange(line, 0, 1);
+                    break;
                 }
                 catch (Exception)
                 {
@@ -63,6 +64,7 @@ namespace IO
             {
                 try {
                     driver.helmet_circumference = Parser.ParseDoubleRange(line, 0, 100);
+                    break;
                 }
                 catch (Exception)
                 {
@@ -81,6 +83,7 @@ namespace IO
             {
                 try{
                     driver.shoulder_width = Parser.ParseDoubleRange(line, 0, 100);
+                    break;
                 }
                 catch (Exception)
                 {
@@ -99,6 +102,7 @@ namespace IO
             {
                 try {
                     driver.upper_arm_length = Parser.ParseDoubleRange(line, 0, 100);
+                    break;
                 }
                 catch (Exception)
                 {
@@ -117,6 +121,7 @@ namespace IO
             {
                 try {
                     driver.back_height = Parser.ParseDoubleRange(line, 0, 100);
+                    break;
                 }
                 catch (Exception)
                 {
