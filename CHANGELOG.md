@@ -23,6 +23,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Minor Pieces
 - `ManPage.Help()` should use `Printer` class
 
+## [alpha 0.2.4] 2024-09-25
+### Added
+- `AutoChassis.Tests` project
+- Unit and integration tests
+### Changed
+- `Parser.cs` now throws exceptions instead of returing possibly valid data as a "flag" for bad input
+- `Input.cs` can handle exceptions being thrown gracefully 
+
 ## [alpha 0.2.3] 2024-09-25
 ### Added
 - `VERSION` file embedded within the binary
