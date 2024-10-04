@@ -48,13 +48,18 @@ namespace Utilities
             return new Point(x, y, given_z);
         }
 
-        public static Point YZPointAlongArcAtAngle(Point center, double radius, double angle)
+        public static Point YZPointAlongArcAtAngle(Point center, Point moved, double radius, double angle)
         {
             // Math.Cos and Math.Sin take radians, not degrees (<-- f!#$ you Microsoft)
             double z = radius * Math.Cos(angle * Math.PI / 180);
             double y = radius * Math.Sin(angle * Math.PI / 180);
 
-            return new Point(center.x, y, z);
+            return new Point(moved.x, y, z);
+        }
+
+        public static double YPointAlongArc(Point center, Point moved, double radius, double angle)
+        {
+            return radius * Math.Sin(angle * Math.PI / 180);
         }
     }
 }

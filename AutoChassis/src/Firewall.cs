@@ -243,11 +243,15 @@ namespace AutoChassis
 
         private void AngleAdjustment()
         {
-            SL = Equations.YZPointAlongArcAtAngle(AL, BL.y, FIREWALL_ANGLE);
-            SR = Equations.YZPointAlongArcAtAngle(AL, BR.y, FIREWALL_ANGLE);
+            SL = Equations.YZPointAlongArcAtAngle(AL, SL, sim_height + seat_height, FIREWALL_ANGLE);
+            SL.y = -1 * SL.y;
+            SR = Equations.YZPointAlongArcAtAngle(AR, SR, sim_height + seat_height, FIREWALL_ANGLE);
+            SR.y = -1 * SR.y;
 
-            BL = Equations.YZPointAlongArcAtAngle(AL, sim_height + seat_height, FIREWALL_ANGLE);
-            BR = Equations.YZPointAlongArcAtAngle(AR, sim_height + seat_height, FIREWALL_ANGLE);
+            BL = Equations.YZPointAlongArcAtAngle(AL, BL, BL.y, FIREWALL_ANGLE);
+            BL.y = -1 * BL.y;
+            BR = Equations.YZPointAlongArcAtAngle(AR, BR, BR.y, FIREWALL_ANGLE);
+            BR.y = -1 * BR.y;
         }
     }
 }

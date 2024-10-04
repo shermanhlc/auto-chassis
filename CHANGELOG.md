@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Checks for toebox clearance
 - Rotate firewall to use the same x-y-z directionals
 - Rollcage based on shock mount
+- Define which variables (x, y, z) are up/down, left/right, front/back
 
 ### CHANGES NEEDED FOR CHASSIS DESIGN
 - `Firewall.cs` does not check head clearance properly
@@ -28,6 +29,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Minor Pieces
 - `ManPage.Help()` should use `Printer` class
 - `PTSBuilder.cs` does not clear a `.pts` file before appending new data to it
+
+## [alpha 0.2.6] 2024-10-04
+### Added
+- `Firewall.cs` has a new function `AngleAdjustments()` that takes an angle in the config and rotates the firewall along the AR-AL tube
+- New config option `firewall_angle`
+### Changed
+- Parsing doubles no longer subjected to only positive values
+- Tests updated to account for changes to `Parser.cs`
+### Fixed
+- Angles are converted to radians prior to calculations
+- All points are initialized with a default constructor instead of a `zero-zero` object
+- All firewall points are set (mirrored) instead of being (0, 0, 0)
+### Removed
+- Tests for `Parser.cs` that included the `zeroPermitted` flag
 
 ## [alpha 0.2.5] 2024-09-29
 ### Added
