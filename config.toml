@@ -6,6 +6,10 @@
 #!
 #! All values must be floating point values in order to be parsed
 
+[user]
+firewall_angle=18.0  # angle of firewall from vertical
+seat_height=0.0
+sim_height=0.0
 
 [clearance]
 head=6.0  # clearance required from the head/helmet

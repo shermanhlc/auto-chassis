@@ -77,9 +77,9 @@ class Program
 
         await TestGroundSuspension(fw);
 
-        Printer.PrintPointWithLabel(fw.BR, "BR");
-        Printer.PrintPointWithLabel(fw.AR, "AR");
-        Printer.PrintPointWithLabel(fw.SR, "SR");
+        // Printer.PrintPointWithLabel(fw.BR, "BR");
+        // Printer.PrintPointWithLabel(fw.AR, "AR");
+        // Printer.PrintPointWithLabel(fw.SR, "SR");
 
     }
 
@@ -111,16 +111,16 @@ class Program
         Toebox tb = new(fw.tolerance, fw.driver, fs, fw);
         await tb.Start();
 
-        Printer.PrintPointWithLabel(tb.DR, "DR");
-        Printer.PrintPointWithLabel(tb.DL, "DL");
-        Printer.PrintPointWithLabel(tb.ER, "ER");
-        Printer.PrintPointWithLabel(tb.EL, "EL");
-        Printer.PrintPointWithLabel(tb.FR, "FR");
-        Printer.PrintPointWithLabel(tb.FL, "FL");
-        Printer.PrintPointWithLabel(tb.GR, "GR");
-        Printer.PrintPointWithLabel(tb.GL, "GL");
-        Printer.PrintPointWithLabel(tb.CDR, "CDR");
-        Printer.PrintPointWithLabel(tb.CDL, "CDL");
+        // Printer.PrintPointWithLabel(tb.DR, "DR");
+        // Printer.PrintPointWithLabel(tb.DL, "DL");
+        // Printer.PrintPointWithLabel(tb.ER, "ER");
+        // Printer.PrintPointWithLabel(tb.EL, "EL");
+        // Printer.PrintPointWithLabel(tb.FR, "FR");
+        // Printer.PrintPointWithLabel(tb.FL, "FL");
+        // Printer.PrintPointWithLabel(tb.GR, "GR");
+        // Printer.PrintPointWithLabel(tb.GL, "GL");
+        // Printer.PrintPointWithLabel(tb.CDR, "CDR");
+        // Printer.PrintPointWithLabel(tb.CDL, "CDL");
 
         SortedDictionary<string, Point> points = new() {
             { "BR", fw.BR },

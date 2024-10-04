@@ -59,13 +59,12 @@ namespace AutoChassis
             this.elbow_point = CalculateElbowPoint();
             this.hip_point = CalculateHipPoint();
 
-            Point zero_zero = new Point(0, 0);
-            BR = zero_zero;
-            BL = zero_zero;
-            SR = zero_zero;
-            SL = zero_zero;
-            AR = zero_zero;
-            AL = zero_zero;
+            BR = new Point();
+            BL = new Point();
+            SR = new Point();
+            SL = new Point();
+            AR = new Point();
+            AL = new Point();
         }
 
         public async Task Start()
@@ -81,6 +80,8 @@ namespace AutoChassis
             // Task example = Task.Run(() => Example());
 
             await Task.WhenAll(calcLineA);
+
+            AngleAdjustment();
             Console.WriteLine("finished calculations for firewall");
         }
 
@@ -129,11 +130,11 @@ namespace AutoChassis
                 top_point.x = MIN_LATERAL_LENGTH * tolerance;
             }
 
-            BR = new Point(
-                top_point.x,
-                top_point.y,
-                0
-            );
+            BR.x = top_point.x;
+            BR.y = top_point.y;
+
+            BL.x = -top_point.x;
+            BL.y = top_point.y;
         }
 
         /// <summary>
@@ -143,6 +144,7 @@ namespace AutoChassis
         public void DetermineLineA()
         {
             SR = Equations.PointAlongLineAtYValue(BR, shoulder_point, sim_height + seat_height);
+            SL = new Point(-SR.x, SR.y, SR.z); // mirror the point
 
             Point bottom_point = new Point(
                 0,
@@ -179,11 +181,11 @@ namespace AutoChassis
                 bottom_point.x = MIN_LATERAL_LENGTH * tolerance;
             }
 
-            AR = new Point(
-                bottom_point.x,
-                bottom_point.y,
-                0
-            );
+            AR.x = bottom_point.x;
+            AR.y = bottom_point.y;
+
+            AL.x = -bottom_point.x;
+            AL.y = bottom_point.y;
         }
 
         bool CheckHelmetClearance(Point a)
@@ -237,6 +239,19 @@ namespace AutoChassis
 
             hip_point = new Point(x, y);
             return hip_point;
+        }
+
+        private void AngleAdjustment()
+        {
+            SL = Equations.YZPointAlongArcAtAngle(AL, SL, sim_height + seat_height, FIREWALL_ANGLE);
+            SL.y = -1 * SL.y;
+            SR = Equations.YZPointAlongArcAtAngle(AR, SR, sim_height + seat_height, FIREWALL_ANGLE);
+            SR.y = -1 * SR.y;
+
+            BL = Equations.YZPointAlongArcAtAngle(AL, BL, BL.y, FIREWALL_ANGLE);
+            BL.y = -1 * BL.y;
+            BR = Equations.YZPointAlongArcAtAngle(AR, BR, BR.y, FIREWALL_ANGLE);
+            BR.y = -1 * BR.y;
         }
     }
 }
