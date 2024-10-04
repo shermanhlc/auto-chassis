@@ -6,6 +6,9 @@ using IO;
 
 public static class Config
 {
+    // user
+    public static readonly double FIREWALL_ANGLE;
+
     // clearance
     public static readonly double HEAD_CLEARANCE;
     public static readonly double BODY_CLEARANCE;
@@ -46,6 +49,15 @@ public static class Config
                 // find all necessary key-value pairs
                 TomlTable toml = toml_parse.ToModel();
 
+
+                if(toml["user"] is TomlTable user)
+                {
+                    FIREWALL_ANGLE = (double)user["firewall_angle"];
+                }
+                else
+                {
+                    throw new MissingTomlKeyException("user table not found in config.toml");
+                }
 
                 if (toml["clearance"] is TomlTable clearance)
                 {

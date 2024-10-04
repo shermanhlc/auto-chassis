@@ -11,18 +11,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rotate firewall to use the same x-y-z directionals
 - Rollcage based on shock mount
 
+### CHANGES NEEDED FOR CHASSIS DESIGN
+- `Firewall.cs` does not check head clearance properly
+- SIM length is not encountered for
+- Tabs are not accounted for
+- Toebox is oriented the wrong way
+
 ### Fixes
 - Firewall when at an angle reduces the height of the sims
+- Firewall top needs to be 6 above head from a plane between the bars, not 6in from the bar themselves
 - Offset for suspension points not accounted for
-- Consider the ass size
+- Consider the ass size (size of the driver's rear end increases their height, should measure from sitting would fix this)
 - Consider the tube length
-- `Parser.cs` should notify for failures
+- `Parser.cs` should notify for failures (this has been changed and needs reconsidering)
 
 ### Minor Pieces
 - `ManPage.Help()` should use `Printer` class
 - `PTSBuilder.cs` does not clear a `.pts` file before appending new data to it
 
-## [alpha 0.2.5] 2024-09-25
+## [alpha 0.2.5] 2024-09-29
 ### Added
 - `PTSBuilder.cs` can now build a properly labeled `.pts` file
 - new config option: outout file path
@@ -73,4 +80,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Firewall calculations are possible (technically)
 
 ## Releases
-[0.0.1]: https://github.com/shermanhlc/auto-chassis/releases/tag/v0.1.0-alpha
+[alpha 0.2.3]: https://github.com/shermanhlc/auto-chassis/releases/tag/v0.2.3-alpha
+[alpha 0.0.1]: https://github.com/shermanhlc/auto-chassis/releases/tag/v0.1.0-alpha

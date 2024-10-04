@@ -34,7 +34,7 @@ namespace IO
             {
                 try
                 {
-                    t = Parser.ParseDoubleRange(line, 0, 1);
+                    t = Parser.ParseDoubleRange(line, 1, 100);
                     break;
                 }
                 catch (Exception)

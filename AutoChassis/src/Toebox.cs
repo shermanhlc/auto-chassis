@@ -41,8 +41,16 @@ namespace AutoChassis
             firewall = fw;
             front_suspension = fs;
 
-            Point zero_zero = new(0, 0);
-            DR = DL = ER = EL = FR = FL = GR = GL = CDR = CDL = zero_zero;  // set all points to origin for initialization
+            DR = new Point();
+            DL = new Point();
+            ER = new Point();
+            EL = new Point();
+            FR = new Point();
+            FL = new Point();
+            GR = new Point();
+            GL = new Point();
+            CDR = new Point();
+            CDL = new Point();
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously

@@ -4,19 +4,11 @@ namespace Utilities
 {
     public static class Parser
     {
-        public static double ParseDouble(string str, bool zeroPermitted = false)
+        public static double ParseDouble(string str)
         {
             try {
                 double d = double.Parse(str);
-                if (zeroPermitted && d < 0) {
-                    throw new ArgumentOutOfRangeException("Value must be greater than or equal to 0");
-                }
-                else if (!zeroPermitted && d <= 0) {
-                    throw new ArgumentOutOfRangeException("Value must be greater than 0");
-                }
-                else {
-                    return d;
-                }
+                return d;
             } catch (FormatException) {
                 throw;
             }
@@ -25,7 +17,7 @@ namespace Utilities
         public static double ParseDoubleRange(string str, double min, double max)
         {   
             try {
-                double d = ParseDouble(str, true);
+                double d = ParseDouble(str);
 
                 if (d < min || d > max) {
                     throw new ArgumentOutOfRangeException($"Value must be between {min} and {max}");
