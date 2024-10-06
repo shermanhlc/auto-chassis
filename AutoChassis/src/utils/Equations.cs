@@ -61,5 +61,24 @@ namespace Utilities
         {
             return radius * Math.Sin(angle * Math.PI / 180);
         }
+
+        public static Point LineIntersection3D(Point a, Point b, Point c)
+        {
+            double u = (c.x - a.x) * (b.x - a.x) + (c.y - a.y) * (b.y - a.y) + (c.z - a.z) * (b.z - a.z);
+            double distance = Distance3D(a, b);
+            double u2 = u / (distance * distance);
+
+            Point t = new();
+            t.x = a.x + u2 * (b.x - a.x);
+            t.y = a.y + u2 * (b.y - a.y);
+            t.z = a.z + u2 * (b.z - a.z);
+
+            return t;
+        }
+
+        public static double Distance3D(Point a, Point b)
+        {
+            return Math.Sqrt(Math.Pow(a.x - b.x, 2) + Math.Pow(a.y - b.y, 2) + Math.Pow(a.z - b.z, 2));
+        }
     }
 }
