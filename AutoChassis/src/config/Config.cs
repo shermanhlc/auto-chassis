@@ -8,6 +8,8 @@ public static class Config
 {
     // user
     public static readonly double FIREWALL_ANGLE;
+    public static readonly double TAB_LENGTH;
+    public static readonly double TUBE_RADIUS;
 
     // clearance
     public static readonly double HEAD_CLEARANCE;
@@ -16,6 +18,8 @@ public static class Config
     // rules
     public static readonly double MIN_LATERAL_LENGTH;
     public static readonly double MIN_VERTICAL_HEIGHT;
+    public static readonly double MAX_TUBE_LENGTH;
+    public static readonly double DEBBIE_HEIGHT;
 
     // process
     public static readonly double ITERATION_STEP;
@@ -53,6 +57,8 @@ public static class Config
                 if(toml["user"] is TomlTable user)
                 {
                     FIREWALL_ANGLE = (double)user["firewall_angle"];
+                    TAB_LENGTH = (double)user["tab_length"];
+                    TUBE_RADIUS = (double)user["tube_radius"];
                 }
                 else
                 {
@@ -74,6 +80,8 @@ public static class Config
                 {
                     MIN_LATERAL_LENGTH = (double)rules["lateral"];
                     MIN_VERTICAL_HEIGHT = (double)rules["vertical"];
+                    MAX_TUBE_LENGTH = (double)rules["max_tube_length"];
+                    DEBBIE_HEIGHT = (double)rules["debbie_height"];
                 }
                 else
                 {

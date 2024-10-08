@@ -30,10 +30,13 @@ namespace AutoChassis
         public Point CDR { get; set; }
         public Point CDL { get; set; }
 
+        // front axle
+        public Point front_axle { get; set; }
+
         FrontSuspension front_suspension { get; set; }
         Firewall firewall { get; set; }
 
-        public Toebox(double tolerance, Driver driver, FrontSuspension fs, Firewall fw)
+        public Toebox(double tolerance, Driver driver, FrontSuspension fs, Firewall fw, Point front_axle)
         {
             this.tolerance = tolerance;
             this.driver = driver;
@@ -51,6 +54,7 @@ namespace AutoChassis
             GL = new Point();
             CDR = new Point();
             CDL = new Point();
+            this.front_axle = front_axle;
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -60,6 +64,7 @@ namespace AutoChassis
             BuildRearBar();
             BuildFrontBar();
             ShockMount();
+            AdjustForTabsAndTubes();
         }
 
         public void FindLegAngle()
@@ -116,26 +121,69 @@ namespace AutoChassis
 
         private void BuildRearBar()
         {
-            FR = front_suspension.lower_arm.rear;
-            DR = Equations.PointAlong3DLineAtZValue(FR, front_suspension.upper_arm.rear, firewall.SR.y);
+            // FR = front_suspension.lower_arm.rear;
+            // DR = Equations.PointAlong3DLineAtZValue(FR, front_suspension.upper_arm.rear, firewall.SR.y);
 
-            FL = new Point(FR.x, -FR.y, FR.z);
-            DL = new Point(DR.x, -DR.y, DR.z);
+            // FL = new Point(FR.x, -FR.y, FR.z);
+            // DL = new Point(DR.x, -DR.y, DR.z);
+
+
+            // new
+            FL = front_suspension.lower_arm.rear;
+            DL = front_suspension.upper_arm.rear;
+            
+            FR = new Point(-FL.x, FL.y, FL.z);
+            DR = new Point(-DL.x, DL.y, DL.z);
         }
 
         private void BuildFrontBar()
         {
-            ER = front_suspension.lower_arm.front;
-            GR = Equations.PointAlong3DLineAtZValue(ER, front_suspension.upper_arm.front, firewall.SR.y);
+            // ER = front_suspension.lower_arm.front;
+            // GR = Equations.PointAlong3DLineAtZValue(ER, front_suspension.upper_arm.front, firewall.SR.y);
 
-            EL = new Point(ER.x, -ER.y, ER.z);
-            GL = new Point(GR.x, -GR.y, GR.z);
+            // EL = new Point(ER.x, -ER.y, ER.z);
+            // GL = new Point(GR.x, -GR.y, GR.z);
+
+            // new
+            EL = front_suspension.lower_arm.front;
+            GL = Equations.PointAlong3DLineAtYValue(EL, front_suspension.upper_arm.front, firewall.SR.y);
+
+            ER = new Point(-EL.x, EL.y, EL.z);
+            GR = new Point(-GL.x, GL.y, GL.z);
+
+
         }
 
         private void ShockMount()
         {
-            CDR = front_suspension.shock.upper;
-            CDL = new Point(CDR.x, -CDR.y, CDR.z);
+            CDL = front_suspension.shock.upper;
+            CDR = new Point(-1 * CDL.x, CDL.y, CDL.z);
+        }
+
+        public void AdjustForTabsAndTubes()
+        {
+            DR.x = AdjustInwards(DR.x, TAB_LENGTH + TUBE_RADIUS);
+            DL.x = AdjustInwards(DL.x, TAB_LENGTH + TUBE_RADIUS);
+            ER.x = AdjustInwards(ER.x, TAB_LENGTH + TUBE_RADIUS);
+            EL.x = AdjustInwards(EL.x, TAB_LENGTH + TUBE_RADIUS);
+            FR.x = AdjustInwards(FR.x, TAB_LENGTH + TUBE_RADIUS);
+            FL.x = AdjustInwards(FL.x, TAB_LENGTH + TUBE_RADIUS);
+            GR.x = AdjustInwards(GR.x, TAB_LENGTH + TUBE_RADIUS);
+            GL.x = AdjustInwards(GL.x, TAB_LENGTH + TUBE_RADIUS);
+            CDR.x = AdjustInwards(CDR.x, TAB_LENGTH + TUBE_RADIUS);
+            CDL.x = AdjustInwards(CDL.x, TAB_LENGTH + TUBE_RADIUS);
+        }
+
+        public double AdjustInwards(double value, double amount)
+        {
+            if(value > 0)
+            {
+                return value - amount;
+            }
+            else
+            {
+                return value + amount;
+            }
         }
     }
 }

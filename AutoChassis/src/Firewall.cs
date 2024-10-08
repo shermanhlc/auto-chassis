@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 using Utilities;
+using IO;
 
 namespace AutoChassis
 {
@@ -82,6 +83,9 @@ namespace AutoChassis
             await Task.WhenAll(calcLineA);
 
             AngleAdjustment();
+            DebbieAdjustment();
+            Printer.PrintPoint(BR);
+            Y_IS_UP_DEV();
             Console.WriteLine("finished calculations for firewall");
         }
 
@@ -101,14 +105,19 @@ namespace AutoChassis
         public void DetermineLineB()
         {
             Point top_point = new Point(
-                0, // start in center
+                10.45,
+                // MIN_LATERAL_LENGTH / 2, // start in center
                 helmet_center.y + HEAD_CLEARANCE * tolerance,
-                0 // not implemented yet
+                0 // accounted for in AngleAdjustments()
             );
 
             bool clear = false;
             while (!clear)
             {
+                if (top_point.x > 40)
+                {
+                    break;
+                }
                 clear = true;
                 double totalPoints = Equations.Length(shoulder_point, top_point) / ITERATION_STEP;
 
@@ -116,13 +125,71 @@ namespace AutoChassis
                 {
                     double t = i / totalPoints;
                     Point p = Equations.Interpolation(top_point, shoulder_point, t);
-                    if (!CheckHelmetClearance(p))
+                    if (!CheckHelmetClearanceSide(p))
                     {
                         top_point.x += ITERATION_STEP;
                         clear = false;
                         break;
                     }
                 }
+
+                Point adjusted_top_point = new(Equations.YZPointAlongArcAtAngle(AR, top_point, top_point.y, FIREWALL_ANGLE));
+                adjusted_top_point.y = -1 * adjusted_top_point.y;
+                adjusted_top_point.FlipYZ();
+                // Printer.PrintPoint(adjusted_top_point);
+                // Printer.PrintPoint(top_point);
+
+                Point adjusted_center = new(Equations.YZPointAlongArcAtAngle(AR, SR, sim_height + seat_height, FIREWALL_ANGLE));
+                adjusted_center.y = -1 * adjusted_center.y;
+                adjusted_center.FlipYZ();
+
+                Point max_top_tube = new(adjusted_top_point);
+                max_top_tube.z += 40;
+                // Printer.PrintPoint(max_top_tube);
+                // Printer.PrintPoint(adjusted_top_point);
+
+                // calculate the cetner of head, move foward
+                Point head_center = new(Equations.YZPointAlongArcAtAngle(AR, helmet_center, helmet_center.y, FIREWALL_ANGLE));
+                head_center.y = head_center.y + Equations.CircumferenceToRadius(driver.helmet_circumference);
+
+                double total_top_points = MAX_TUBE_LENGTH / ITERATION_STEP;
+                double total_side_points = Equations.Length(adjusted_top_point, adjusted_center) / ITERATION_STEP;
+                for(int i = 0; i <= total_top_points; i++)
+                {
+                    for(int j = 0; j <= total_side_points; j++)
+                    {
+                        double t = i / total_top_points;
+                        double s = j / total_side_points;
+                        // Console.WriteLine();
+                        // Printer.PrintPoint(adjusted_top_point);
+                        // Printer.PrintPoint(max_top_tube);
+                        // Printer.PrintPoint(adjusted_center);
+                        Point p = new(Equations.Interpolation(adjusted_top_point, max_top_tube, t));
+                        // Printer.PrintPoint(p);
+                        Point q = new(Equations.Interpolation(adjusted_top_point, adjusted_center, s));
+                        
+                        
+
+                        // Console.WriteLine();
+                        // Printer.PrintPoint(q);
+                        // Printer.PrintPoint(p);
+                        if (p != q && !CheckHelmetClearance3D(p, q, head_center))
+                        {
+                            Console.WriteLine("run");
+                            Printer.PrintPoint(p);
+                            Printer.PrintPoint(q);
+                            Printer.PrintPoint(head_center);
+                            Console.WriteLine();
+                            Console.WriteLine(Equations.Distance3D(Equations.LineIntersection3D(p, q, head_center), head_center));
+                            Console.WriteLine(HEAD_CLEARANCE * tolerance + Equations.CircumferenceToRadius(driver.helmet_circumference));
+                            Console.WriteLine();
+                            top_point.x += ITERATION_STEP;
+                            clear = false;
+                            break;
+                        }
+                    }
+                }
+                Printer.PrintPoint(top_point);
             }
 
             if (top_point.x < MIN_LATERAL_LENGTH / 2)
@@ -188,9 +255,18 @@ namespace AutoChassis
             AL.y = bottom_point.y;
         }
 
-        bool CheckHelmetClearance(Point a)
+        bool CheckHelmetClearanceSide(Point a)
         {
             return Equations.Length(a, helmet_center) > (HEAD_CLEARANCE * tolerance + Equations.CircumferenceToRadius(driver.helmet_circumference));
+        }
+
+        bool CheckHelmetClearance3D(Point side, Point top, Point center)
+        {
+            // // compare distance to radius
+            // Console.WriteLine(Equations.Distance3D(Equations.LineIntersection3D(side, top, center), center));
+            // Console.WriteLine(HEAD_CLEARANCE * tolerance + Equations.CircumferenceToRadius(driver.helmet_circumference));
+            // Console.WriteLine();
+            return Equations.Distance3D(Equations.LineIntersection3D(side, top, center), center) > (HEAD_CLEARANCE * tolerance + Equations.CircumferenceToRadius(driver.helmet_circumference));
         }
 
         bool CheckElbowClearance(Point a)
@@ -208,7 +284,7 @@ namespace AutoChassis
             double helmet_radius = Equations.CircumferenceToRadius(driver.helmet_circumference);
             double x = 0;
             double y;
-            y = seat_height + driver.back_height + (driver.head_height - helmet_radius);
+            y = seat_height + driver.hip_to_head - helmet_radius;
 
             helmet_center = new Point(x, y);
             return helmet_center;
@@ -252,6 +328,20 @@ namespace AutoChassis
             BL.y = -1 * BL.y;
             BR = Equations.YZPointAlongArcAtAngle(AR, BR, BR.y, FIREWALL_ANGLE);
             BR.y = -1 * BR.y;
+        }
+
+        private void Y_IS_UP_DEV()
+        {
+            (BR.y, BR.z) = (BR.z, BR.y);
+            (BL.y, BL.z) = (BL.z, BL.y);
+
+            (SR.y, SR.z) = (SR.z, SR.y);
+            (SL.y, SL.z) = (SL.z, SL.y);
+        }
+
+        private void DebbieAdjustment()
+        {
+            
         }
     }
 }

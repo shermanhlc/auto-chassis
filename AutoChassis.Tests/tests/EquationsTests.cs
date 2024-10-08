@@ -45,5 +45,11 @@ namespace AutoChassis.Tests
             Assert.Equal(-2.292, t.z, 3);
         }
 
+        [Fact]
+        public void LineIntersection2()
+        {
+            Point a = new Point(160, 40, 0);
+            Point b = new Point(160, 40, 0);
+        }
     }
 }

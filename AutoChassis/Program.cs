@@ -70,7 +70,7 @@ class Program
 
     public static async Task TestGround()
     {
-        Firewall fw = new(Input.GetTolerance(), 4, 13.6, Input.GetDriver());
+        Firewall fw = new(Input.GetTolerance(), 3.5, 13.6, Input.GetDriver());
 
         Task t_firewall = fw.Start();
         await Task.WhenAll(t_firewall); // <-- add other parts here to run concurrently (t_firewall, t_other, t_another)
@@ -87,20 +87,23 @@ class Program
     {
         // 9 inches apart, perfectly parallel to the center plane, and the front is .25 inches higher than the rear
         ControlArm lower = new ControlArm {
-            front = new Point(9, 7.5, 0.25), // 6, 7.5, 13.25)
-            rear = new Point(0, 7.5, 0)      // 15, 7.5, 13.5
+            // front = new Point(9, 7.5, 0.25), // 6, 7.5, 13.25)
+            // rear = new Point(0, 7.5, 0)      // 15, 7.5, 13.5
+            front = new Point(-5.5, 3, 16.65),
+            rear = new Point(-5.5, 0, 0)
         };
 
         ControlArm upper = new ControlArm {
-            front = new Point(9, 9.4, 9.5),
-            rear = new Point(0, 9.4, 8)
+            // front = new Point(9, 9.4, 9.5),
+            // rear = new Point(0, 9.4, 8)
+            front = new Point(-7.5, 10.142, 17.39),
+            rear = new Point(-7.5, 7.855, 4.694)
         };
 
         Shock shock = new Shock {
-            lower = new Point(4, 20.75, 5.5), // < this point does not matter and probably is never used
-            upper = new Point(-5.5, 8.75, 19)
+            lower = new Point(-16.25, 0.375, 5), // < this point does not matter and probably is never used
+            upper = new Point(-10.5, 19.25, 2.25)
         };
-
 
         FrontSuspension fs = new FrontSuspension {
             lower_arm = lower,
@@ -108,8 +111,16 @@ class Program
             shock = shock
         };
 
-        Toebox tb = new(fw.tolerance, fw.driver, fs, fw);
+        Point front_axle = new(-6, 4, 7);
+        Toebox tb = new(fw.tolerance, fw.driver, fs, fw, front_axle);
         await tb.Start();
+
+        double rear_axle_distance = 22;
+        double front_axle_distance = 31;
+        double wheelbase = 53;
+        SIM sim = new(rear_axle_distance, front_axle_distance, wheelbase, tb);
+
+        Toebox tb2 = sim.FindSimLength();
 
         // Printer.PrintPointWithLabel(tb.DR, "DR");
         // Printer.PrintPointWithLabel(tb.DL, "DL");
@@ -129,16 +140,16 @@ class Program
             { "SL", fw.SL },
             { "AR", fw.AR },
             { "AL", fw.AL },
-            { "DR", tb.DR },
-            { "DL", tb.DL },
-            { "ER", tb.ER },
-            { "EL", tb.EL },
-            { "FR", tb.FR },
-            { "FL", tb.FL },
-            { "GR", tb.GR },
-            { "GL", tb.GL },
-            { "CDR", tb.CDR },
-            { "CDL", tb.CDL }
+            { "DR", tb2.DR },
+            { "DL", tb2.DL },
+            { "ER", tb2.ER },
+            { "EL", tb2.EL },
+            { "FR", tb2.FR },
+            { "FL", tb2.FL },
+            { "GR", tb2.GR },
+            { "GL", tb2.GL },
+            { "CDR", tb2.CDR },
+            { "CDL", tb2.CDL }
         };
 
         PTSBuilder.BuildPTSFile(points, "test.pts");

@@ -55,12 +55,12 @@ namespace AutoChassis.Tests
                     string final_output = process.StandardOutput.ReadToEnd();
                     process.WaitForExit();
 
-                    // Console.Write(final_output);
+                    Console.Write(final_output);
                     Assert.Contains("finished calculations for firewall", final_output);
                 }
             }
 
-            Assert.True(true);
+            // Assert.True(false);
         }
     }
 }

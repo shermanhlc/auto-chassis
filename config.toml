@@ -10,14 +10,18 @@
 firewall_angle=18.0  # angle of firewall from vertical
 seat_height=0.0
 sim_height=0.0
+tab_length=1.0
+tube_radius=0.625
 
 [clearance]
 head=6.0  # clearance required from the head/helmet
 body=3.0  # clearance required from the body
 
 [rules]
-lateral=8.0    # minimum length of lateral members
-vertical=42.0  # minimum height from the seat bottom to the roll hoop overhead member
+lateral=8.0           # minimum length of lateral members
+vertical=42.0         # minimum height from the seat bottom to the roll hoop overhead member
+max_tube_length=40.0  # maximum length of any tube
+debbie_height=42.0
 
 [process]
 iteration_step=0.01   # step used by optimizer, smaller number is more accurate but will increase compute time exponentially

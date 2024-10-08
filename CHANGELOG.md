@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consider the tube length
 - `Parser.cs` should notify for failures (this has been changed and needs reconsidering)
 
+### Bugs
+- Rounding error may cause larger/smaller necessary points
+
 ### Minor Pieces
 - `ManPage.Help()` should use `Printer` class
 - `PTSBuilder.cs` does not clear a `.pts` file before appending new data to it

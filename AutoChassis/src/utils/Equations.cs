@@ -1,4 +1,4 @@
-using System;
+using IO;
 
 namespace Utilities
 {
@@ -18,7 +18,8 @@ namespace Utilities
         {
             return new Point(
                 p1.x + t * (p2.x - p1.x),
-                p1.y + t * (p2.y - p1.y)
+                p1.y + t * (p2.y - p1.y),
+                p1.z + t * (p2.z - p1.z)
             );
         }
 
@@ -48,6 +49,16 @@ namespace Utilities
             return new Point(x, y, given_z);
         }
 
+        public static Point PointAlong3DLineAtYValue(Point a, Point b, double given_y)
+        {
+            double t = (given_y - a.y) / (b.y - a.y);
+
+            double x = a.x + t * (b.x - a.x);
+            double z = a.z + t * (b.z - a.z);
+
+            return new Point(x, given_y, z);
+        }
+
         public static Point YZPointAlongArcAtAngle(Point center, Point moved, double radius, double angle)
         {
             // Math.Cos and Math.Sin take radians, not degrees (<-- f!#$ you Microsoft)
@@ -64,15 +75,21 @@ namespace Utilities
 
         public static Point LineIntersection3D(Point a, Point b, Point c)
         {
+            // Printer.PrintPoint(a);  
+            // Printer.PrintPoint(b);
+            // Printer.PrintPoint(c);
             double u = (c.x - a.x) * (b.x - a.x) + (c.y - a.y) * (b.y - a.y) + (c.z - a.z) * (b.z - a.z);
             double distance = Distance3D(a, b);
             double u2 = u / (distance * distance);
 
-            Point t = new();
-            t.x = a.x + u2 * (b.x - a.x);
-            t.y = a.y + u2 * (b.y - a.y);
-            t.z = a.z + u2 * (b.z - a.z);
+            Point t = new()
+            {
+                x = a.x + u2 * (b.x - a.x),
+                y = a.y + u2 * (b.y - a.y),
+                z = a.z + u2 * (b.z - a.z)
+            };
 
+            // Printer.PrintPoint(t);
             return t;
         }
 
