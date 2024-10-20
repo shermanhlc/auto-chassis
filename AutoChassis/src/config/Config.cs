@@ -23,7 +23,6 @@ public static class Config
 
     // process
     public static readonly double ITERATION_STEP;
-    public static readonly double SLEEP;
     public static readonly string OUTPUT_PATH;
 
 
