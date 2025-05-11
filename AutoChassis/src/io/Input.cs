@@ -10,7 +10,7 @@ namespace IO
 
         public static Point GetPoint()
         {   
-            Console.WriteLine("Enter point coordinates <x y>: ");
+            Console.WriteLine("Enter point coordinates <x y z>: ");
             while ((line = Put()) != null )
             {
                 if (line == null)
@@ -18,12 +18,32 @@ namespace IO
                     Console.WriteLine("Invalid input. Try again.");
                     continue;
                 }
+                else
+                {
+                    string[] parts = line.Split(' ');
+                    if (parts.Length != 3)
+                    {
+                        Printer.PrintSingleLineColor("Invalid input. Must include three points", ConsoleColor.Red);
+                    }
+                    else
+                    {
+                        foreach(string part in parts)
+                        {
+                            if (!Int.TryParse(part, out int _))
+                            {
+                                Printer.PrintSingleLineColor("Invalid input. Must be a number", ConsoleColor.Red);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             #pragma warning disable CS8602
             string[] parts = line.Split(' '); // gives possible null reference warning, but line cannot be null (loop prevents it)
             #pragma warning restore CS8602
-            return new Point(int.Parse(parts[0]), int.Parse(parts[1]));
+
+            return new Point(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
         }
 
         public static double GetTolerance()

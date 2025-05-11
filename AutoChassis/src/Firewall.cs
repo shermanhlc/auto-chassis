@@ -102,8 +102,10 @@ namespace AutoChassis
             // calculate the top based on the head use those points to get an angle
         // determine line S line
 
+        // calculates the top line of the firewall
         public void DetermineLineB()
         {
+            // default
             Point top_point = new Point(
                 10.45,
                 // MIN_LATERAL_LENGTH / 2, // start in center
@@ -111,20 +113,27 @@ namespace AutoChassis
                 0 // accounted for in AngleAdjustments()
             );
 
+            // loop until all points satisfy rules
             bool clear = false;
             while (!clear)
             {
+                // fail safe: stop program if top point is too high
                 if (top_point.x > 40)
                 {
                     break;
                 }
                 clear = true;
+
+                // total number of points to check, based on iteration step size
                 double totalPoints = Equations.Length(shoulder_point, top_point) / ITERATION_STEP;
 
                 for(int i = 0; i < totalPoints; i++)
                 {
+                    // get the i-th point between the shoulder and the top
                     double t = i / totalPoints;
                     Point p = Equations.Interpolation(top_point, shoulder_point, t);
+
+                    // check helmet clearance
                     if (!CheckHelmetClearanceSide(p))
                     {
                         top_point.x += ITERATION_STEP;
@@ -133,9 +142,16 @@ namespace AutoChassis
                     }
                 }
 
+                // adjust for 3 dimensions post calculations
                 Point adjusted_top_point = new(Equations.YZPointAlongArcAtAngle(AR, top_point, top_point.y, FIREWALL_ANGLE));
                 adjusted_top_point.y = -1 * adjusted_top_point.y;
                 adjusted_top_point.FlipYZ();
+
+
+
+
+
+
                 // Printer.PrintPoint(adjusted_top_point);
                 // Printer.PrintPoint(top_point);
 

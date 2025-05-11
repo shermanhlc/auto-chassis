@@ -75,9 +75,6 @@ namespace Utilities
 
         public static Point LineIntersection3D(Point a, Point b, Point c)
         {
-            // Printer.PrintPoint(a);  
-            // Printer.PrintPoint(b);
-            // Printer.PrintPoint(c);
             double u = (c.x - a.x) * (b.x - a.x) + (c.y - a.y) * (b.y - a.y) + (c.z - a.z) * (b.z - a.z);
             double distance = Distance3D(a, b);
             double u2 = u / (distance * distance);
@@ -89,7 +86,6 @@ namespace Utilities
                 z = a.z + u2 * (b.z - a.z)
             };
 
-            // Printer.PrintPoint(t);
             return t;
         }
 
