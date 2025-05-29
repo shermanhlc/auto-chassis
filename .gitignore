@@ -9,3 +9,5 @@ data/
 *.bak*
 
 *.env
+build/
+

@@ -30,6 +30,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ManPage.Help()` should use `Printer` class
 - `PTSBuilder.cs` does not clear a `.pts` file before appending new data to it
 
+
+
+## [alpha 0.3.0] 2025-
+### Added
+- Build scripts for ease of use with CMake
+
+### Changes
+- Massive overhaul from C# to C++
+
 ## [alpha 0.2.7] 2024-10-06
 ### Added
 - `Equations.cs` has been expanded with two new functions: calculating distance between two points in 3D space, and find the point along a 3D line that is a normal vector to that line
