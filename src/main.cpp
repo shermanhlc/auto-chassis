@@ -7,6 +7,9 @@
 #define TOML_EXCEPTIONS 0  // must be defined before
 #include <toml++/toml.hpp>
 
+#include <utils/point.h>
+#include <utils/equations.h>
+
 
 const QString QtMsgTypeToString(QtMsgType type)
 {
@@ -76,28 +79,29 @@ int main(int argc, char* argv[])
         iterationStepOption
     });
     qparser.process(app);
-
+    
+    // logging
+    qInstallMessageHandler(setupLoggingHandler);
 
     // toml parse
-    QString configPath = qparser.value(configPathOption);
-    toml::parse_result result = toml::parse_file(configPath.toStdString());  // this is now effectively a table&
-
-    if(result.failed())
+    if(qparser.isSet(configPathOption))
     {
-        qWarning().noquote() << "Failed to parse .toml:" << result.error().description();
-        return 1;
+        QString configPath = qparser.value(configPathOption);
+        toml::parse_result result = toml::parse_file(configPath.toStdString());  // this is now effectively a table&
+
+        if(result.failed())
+        {
+            qWarning().noquote() << "Failed to parse .toml:" << result.error().description();
+            return 1;
+        }
+        
+        qInfo()  << "config:" << configPath;
     }
 
     // do something with the table
 
 
-
-
-    // logging
-    qInstallMessageHandler(setupLoggingHandler);
-
     qDebug() << "running with version:" << APP_VERSION;
-    qInfo()  << "config:" << configPath;
     qInfo()  << "Run complete";
     
     // app.exec();
