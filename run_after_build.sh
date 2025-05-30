@@ -2,4 +2,4 @@
 set -e
 
 ./build.sh
-./build/bin/autochassis
+./build/debug/bin/autochassis "$@"

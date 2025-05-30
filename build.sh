@@ -1,15 +1,12 @@
 #!/usr/bin/env sh
 set -e
 
-CALLED_PATH=$(pwd)
-
 if [ ! -d "build" ]; then
-    mkdir build
+    mkdir -p build/debug
+    mkdir -p build/release
 fi
 
-cd build
-cmake ..
-cmake --build .
+cmake -S . -B build/debug -DCMAKE_BUILD_TYPE=Debug
+cmake --build build/debug
 
-cd "$CALLED_PATH"
 echo "Build complete"
