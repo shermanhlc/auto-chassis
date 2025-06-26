@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -e
+
+if [ ! -d "build" ]; then
+    mkdir -p /app/build/debug
+    mkdir -p /app/build/release
+fi
+
+cmake -S /app -B /app/build/debug -DCMAKE_BUILD_TYPE=Debug
+cmake --build /app/build/debug
+
+echo "Build complete"

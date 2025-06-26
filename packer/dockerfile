@@ -1,0 +1,13 @@
+# syntax=docker/dockerfile:1
+FROM nixos/nix
+
+# build files
+COPY CMakeLists.txt /app/CMakeLists.txt
+COPY VERSION /app/VERSION
+
+# directories
+COPY src /app/src
+COPY packer /app/packer
+
+RUN chmod +x /app/packer/build
+RUN nix-shell --pure /app/packer/default.nix --run "/app/packer/build"

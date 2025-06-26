@@ -19,14 +19,17 @@ add_compile_definitions(
 message("Version: ${VERSION_STRING}")
 
 # packages
-include(FetchContent)
-FetchContent_Declare(
-    tomlplusplus
-    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
-    GIT_TAG v3.4.0
-)
-FetchContent_MakeAvailable(tomlplusplus)
+# include(FetchContent)
+# FetchContent_Declare(
+#     tomlplusplus
+#     GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+#     GIT_TAG v3.4.0
+# )
+# FetchContent_MakeAvailable(tomlplusplus)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_subdirectory(src)
+
+get_property(all_targets DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
+message(STATUS "Targets available: ${all_targets}")

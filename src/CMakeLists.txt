@@ -16,6 +16,7 @@ PRIVATE
     chassis
 
     Qt6::Core
+    tomlplusplus
 )
 
 target_include_directories(${PROJECT_NAME}
