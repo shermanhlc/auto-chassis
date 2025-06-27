@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -e
+
+if [ ! -d "build" ]; then
+    mkdir -p /workbench/build/debug
+    mkdir -p /workbench/build/release
+fi
+
+cmake -S /workbench -B /workbench/build/debug -DCMAKE_BUILD_TYPE=Debug
+cmake --build /workbench/build/debug
+
+echo "Build complete"

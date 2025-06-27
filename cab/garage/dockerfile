@@ -1,0 +1,15 @@
+# syntax=docker/dockerfile:1.7
+FROM nixos/nix:2.26.4
+
+# set up env
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# move tools to image
+COPY cab/garage/default.nix /env/default.nix
+COPY cab/toolkit/ /env/toolkit
+
+RUN chmod +x /env/toolkit/build
+RUN nix-shell --pure /env/default.nix --run "echo DOCKER_NIX_IMAGE"
+
+WORKDIR /workbench

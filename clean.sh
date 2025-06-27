@@ -2,7 +2,7 @@
 set -e
 
 if [ -d "build" ]; then
-    rm -r build
+    rm -rf build
 
     echo "Build cleaned"
 else
