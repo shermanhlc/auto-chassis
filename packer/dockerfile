@@ -1,13 +1,13 @@
-# syntax=docker/dockerfile:1
-FROM nixos/nix
+# syntax=docker/dockerfile:1.7
+FROM nixos/nix:2.26.4
 
-# build files
-COPY CMakeLists.txt /app/CMakeLists.txt
-COPY VERSION /app/VERSION
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
-# directories
-COPY src /app/src
-COPY packer /app/packer
+COPY packer/default.nix /env/default.nix
+COPY packer/build /env/build
 
-RUN chmod +x /app/packer/build
-RUN nix-shell --pure /app/packer/default.nix --run "/app/packer/build"
+RUN chmod +x /env/build
+RUN nix-shell --pure /env/default.nix --run "echo DOCKER_NIX_IMAGE"
+
+WORKDIR /workspace

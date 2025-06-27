@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
 
     qDebug() << "running with version:" << APP_VERSION;
     qInfo()  << "Run complete";
-    
+
     // app.exec();
     return 0;
 }

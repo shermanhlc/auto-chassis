@@ -2,11 +2,11 @@
 set -e
 
 if [ ! -d "build" ]; then
-    mkdir -p /app/build/debug
-    mkdir -p /app/build/release
+    mkdir -p /workspace/build/debug
+    mkdir -p /workspace/build/release
 fi
 
-cmake -S /app -B /app/build/debug -DCMAKE_BUILD_TYPE=Debug
-cmake --build /app/build/debug
+cmake -S /workspace -B /workspace/build/debug -DCMAKE_BUILD_TYPE=Debug
+cmake --build /workspace/build/debug
 
 echo "Build complete"
