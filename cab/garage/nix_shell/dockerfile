@@ -1,6 +1,16 @@
 # syntax=docker/dockerfile:1.7
 FROM nixos/nix:2.26.4
 
+# user
+# RUN nix-env -iA nixpkgs.shadow
+
+# ARG USERNAME=default
+# ARG USER_UID=1000
+# ARG USER_GID=1000
+
+# RUN groupadd -g "$USER_GID" "$USERNAME"
+RUN ls /etc/
+
 # set up env
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8

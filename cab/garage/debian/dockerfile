@@ -1,0 +1,16 @@
+# syntax=docker/dockerfile:1.7
+FROM debian:bookworm
+
+RUN apt-get update
+RUN apt-get install -y \
+    g++ \
+    git \
+    cmake \
+    qt6-base-dev \
+    libtomlplusplus-dev 
+
+COPY cab/toolkit/ /env/toolkit
+
+RUN chmod +x /env/toolkit/build
+
+WORKDIR /workbench

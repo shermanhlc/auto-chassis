@@ -20,10 +20,16 @@ pkgs.mkShell {
         pkgs.qt6.qtbase
         pkgs.qt6.wrapQtAppsHook
         pkgs.tomlplusplus
+
+        pkgs.shadow         # for adduser/addgroup
+        pkgs.util-linux
+        pkgs.sudo
     ];
 
     shellHook = ''
         export LANG=C.UTF-8
         export LC_ALL=C.UTF-8
+        export PATH=$PATH:${pkgs.shadow}/bin:${pkgs.util-linux}/bin:${pkgs.sudo}
+        export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
     '';
 }

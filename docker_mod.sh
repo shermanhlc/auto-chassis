@@ -1,7 +1,12 @@
 #!/usr/bin/env sh
 set -e
 
+# user
+USER_UID=$(id -u)
+USER_GID=$(id -g)
+
 NIX_IMAGE_TAG="nix-2.26.4_image:amd64"
+DT_NIX_IMAGE_TAG="dt_nix-25.05_image:amd64"
 DOCKERFILE="cab/garage/dockerfile"
 RUN_POST_BUILD=0
 
@@ -9,20 +14,34 @@ if [ "$1" == "--run" ]; then
     RUN_POST_BUILD=1
 fi
 
-if ! docker image inspect "$NIX_IMAGE_TAG" >/dev/null 2>&1; then
-    echo "docker image \"$NIX_IMAGE_TAG\" not found... building new image"
-    docker buildx build -f $DOCKERFILE -t "$NIX_IMAGE_TAG" .
-fi
+# if ! docker image inspect "$NIX_IMAGE_TAG" >/dev/null 2>&1; then
+#     echo "docker image \"$NIX_IMAGE_TAG\" not found... building new image"
+#     docker buildx build -f $DOCKERFILE -t "$NIX_IMAGE_TAG" .
+# fi
 
+# docker run --rm -it \
+#   -v "$(pwd)":/workbench \
+#   -w /workbench \
+#   --env USER_UID=$(id -u) \
+#   --env USER_GID=$(id -g) \
+#   "$NIX_IMAGE_TAG" \
+#   nix-shell /env/default.nix --pure --run '
+#     groupadd -g 1000 tempgroup
+#     useradd -D -u 1000 -G tempgroup tempuser
+#     HOME=/tmp/tempuser su tempuser -c "/env/toolkit/build"
+#   '
 
+    # -e USER=$(id -un) \
 docker run --rm -it \
+    -u "$USER_UID":"$USER_GID" \
     -v "$(pwd)":/workbench \
     -w /workbench \
-    "$NIX_IMAGE_TAG" \
+    "$DT_NIX_IMAGE_TAG" \
     nix-shell /env/default.nix --run "/env/toolkit/build"
 
 if [ "$RUN_POST_BUILD" -eq 1 ]; then
     docker run --rm -it \
+        -u "$USER_UID":"$USER_GID" \
         -v "$(pwd)":/workbench \
         -w /workbench \
         "$NIX_IMAGE_TAG" \

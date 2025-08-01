@@ -5,7 +5,8 @@
 #include <QCommandLineParser>
 
 #define TOML_EXCEPTIONS 0  // must be defined before
-#include <toml++/toml.hpp>
+// #include <toml++/toml.hpp>
+#include <toml++/toml.h>
 
 #include <utils/point.h>
 #include <utils/equations.h>
@@ -91,7 +92,7 @@ int main(int argc, char* argv[])
 
         if(result.failed())
         {
-            qWarning().noquote() << "Failed to parse .toml:" << result.error().description();
+            qWarning().noquote() << "Failed to parse .toml:" << QString::fromUtf8(result.error().description());
             return 1;
         }
         
